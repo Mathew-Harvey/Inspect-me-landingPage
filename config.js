@@ -1,18 +1,19 @@
 /**
- * Update these URLs when your builds are hosted.
- * Leave empty strings to show "Coming soon" on that platform.
+ * Site configuration — flip comingSoon to false when builds are ready.
  */
 window.INSPECT_ME_CONFIG = {
-  playUrl: "", // e.g. "https://yourname.itch.io/inspect-me" or WebGL build URL
+  comingSoon: true,
+
+  playUrl: "",
 
   downloads: {
-    windows: "", // e.g. "downloads/Inspect-Me-Windows.zip"
+    windows: "",
     mac: "",
     linux: "",
   },
 
-  // Optional: link to GitHub releases page (used as fallback when individual URLs are empty)
   releasesPage: "https://github.com/Mathew-Harvey/Inspect-Me/releases/latest",
+  githubUrl: "https://github.com/Mathew-Harvey/Inspect-Me",
 
   contactEmail: "",
 };

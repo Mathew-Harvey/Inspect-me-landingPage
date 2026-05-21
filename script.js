@@ -1,8 +1,15 @@
 (() => {
   const config = window.INSPECT_ME_CONFIG || {};
+  const comingSoon = config.comingSoon !== false;
   const downloads = config.downloads || {};
   const playUrl = config.playUrl || "";
   const releasesPage = config.releasesPage || "";
+  const githubUrl = config.githubUrl || releasesPage.replace(/\/releases.*$/, "") || "";
+
+  if (githubUrl) {
+    const githubBtn = document.getElementById("btn-github");
+    if (githubBtn) githubBtn.href = githubUrl;
+  }
 
   // ── Year ──
   document.getElementById("year").textContent = new Date().getFullYear();
@@ -72,6 +79,7 @@
   let toastTimer;
 
   function showToast(message) {
+    if (!toast) return;
     toast.textContent = message;
     toast.classList.add("show");
     clearTimeout(toastTimer);
@@ -84,10 +92,6 @@
     return downloads[platform] || "";
   }
 
-  function hasAnyDownload() {
-    return Object.values(downloads).some(Boolean) || playUrl || releasesPage;
-  }
-
   function openLink(url) {
     if (!url) return false;
     window.open(url, url.startsWith("http") ? "_blank" : "_self");
@@ -95,29 +99,24 @@
   }
 
   function handlePlatform(platform) {
-    const url = resolveUrl(platform);
+    if (comingSoon) {
+      showToast("Coming soon — star the repo on GitHub for launch updates.");
+      return;
+    }
 
+    const url = resolveUrl(platform);
     if (url) {
       openLink(url);
       return;
     }
 
-    if (platform !== "play" && releasesPage) {
+    if (releasesPage) {
       openLink(releasesPage);
       showToast("Opening releases page…");
       return;
     }
 
-    const labels = {
-      play: "Web build",
-      windows: "Windows build",
-      mac: "macOS build",
-      linux: "Linux build",
-    };
-
-    showToast(
-      `${labels[platform] || "Download"} not linked yet — add the URL in config.js or drop a build in downloads/.`
-    );
+    showToast("Download not available yet.");
   }
 
   document.querySelectorAll("[data-platform]").forEach((btn) => {
@@ -126,6 +125,8 @@
 
   document.querySelectorAll('[data-action="primary-cta"]').forEach((link) => {
     link.addEventListener("click", (e) => {
+      if (comingSoon) return;
+
       if (playUrl) {
         e.preventDefault();
         openLink(playUrl);
@@ -148,52 +149,39 @@
 
   // ── Update download UI state ──
   const statusEl = document.getElementById("download-status");
-  const playBtn = document.getElementById("btn-play");
 
   function updateDownloadStatus() {
-    const parts = [];
+    if (!statusEl) return;
 
+    if (comingSoon) {
+      statusEl.textContent = "First public release coming soon.";
+      return;
+    }
+
+    const parts = [];
     if (playUrl) parts.push("Browser play ready");
     if (downloads.windows) parts.push("Windows ready");
     if (downloads.mac) parts.push("macOS ready");
     if (downloads.linux) parts.push("Linux ready");
     if (releasesPage && !parts.length) parts.push("Releases page linked");
 
-    if (parts.length) {
-      statusEl.textContent = parts.join(" · ");
-    } else {
-      statusEl.textContent = "Add build URLs in config.js to enable one-click download.";
-    }
-
-    if (playBtn) {
-      playBtn.disabled = false;
-      if (!playUrl) playBtn.title = "Set playUrl in config.js when your WebGL build is ready";
-    }
-
-    document.querySelectorAll(".btn-platform").forEach((btn) => {
-      const platform = btn.dataset.platform;
-      const url = downloads[platform];
-      btn.disabled = !url && !releasesPage;
-      if (url) btn.title = `Download for ${platform}`;
-      else if (releasesPage) btn.title = "Opens releases page";
-      else btn.title = "Coming soon — configure in config.js";
-    });
+    statusEl.textContent = parts.length
+      ? parts.join(" · ")
+      : "Add build URLs in config.js to enable one-click download.";
   }
 
   updateDownloadStatus();
 
-  // ── Particle canvas (underwater bubbles / plankton) ──
+  // ── Particle canvas ──
   const canvas = document.getElementById("particle-canvas");
   if (canvas && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const ctx = canvas.getContext("2d");
     let particles = [];
-    let w = 0;
-    let h = 0;
 
     function resize() {
-      w = canvas.width = canvas.offsetWidth * devicePixelRatio;
-      h = canvas.height = canvas.offsetHeight * devicePixelRatio;
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+      canvas.width = canvas.offsetWidth * devicePixelRatio;
+      canvas.height = canvas.offsetHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
     }
 
     function spawn() {
@@ -232,7 +220,6 @@
     spawn();
     tick();
     window.addEventListener("resize", () => {
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
       resize();
       spawn();
     });
