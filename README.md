@@ -1,7 +1,7 @@
 # Inspect-Me Landing Page
 
 Marketing site for the **Inspect-Me** light inspection-class ROV training
-simulator. Static HTML/CSS/JS — no build step.
+simulator. Static HTML/CSS/JS — no build step. Minimal, content-first design.
 
 ## Quick start
 
@@ -17,28 +17,33 @@ Open `http://localhost:8080`.
 |---|---|
 | `index.html` | Page markup |
 | `styles.css` | All styling |
-| `script.js` | Scroll/reveal, mobile nav, particle canvas, reduced-motion handling |
+| `script.js` | Header state, mobile nav, reduced-motion, 3D model switcher |
 | `config.js` | `githubUrl` + `contactEmail` overrides |
-| `assets/images/` | Screenshots + the generated ROV poster (`rov-poster.png`) |
-| `assets/models/rov.glb` | Interactive 3D ROV shown in the hero |
-| `tools/` | Generators for the 3D model + poster |
+| `assets/images/` | Screenshots + generated model posters (`{rov,submarine,hull}-poster.png`) |
+| `assets/models/` | `{rov,submarine,hull}.glb` + `env-underwater.png` (IBL) |
+| `assets/vendor/` | `model-viewer.min.js` (vendored — no runtime CDN) |
+| `tools/` | Procedural model + poster generators |
 
-## Interactive 3D ROV
+## Interactive 3D fleet
 
-The hero renders an interactive 3D model of a generic light inspection-class ROV
-with [`<model-viewer>`](https://modelviewer.dev/) (loaded from a CDN). The model
-is generated procedurally — no manufacturer branding — and committed as
-`assets/models/rov.glb`.
+The hero shows one [`<model-viewer>`](https://modelviewer.dev/) whose `src` is
+swapped between three procedurally-generated, unbranded models — **ROV**
+(the tool you pilot) and **Submarine** / **Hull** (the targets you inspect).
+Using a single viewer keeps exactly one WebGL context alive no matter how many
+models are offered. "Water" is delivered as a generated equirectangular
+environment map (`env-underwater.png`) used for lighting only — the viewer
+stays transparent over the page background.
 
-To regenerate the model and its fallback poster:
+Regenerate the models, environment, and fallback posters:
 
 ```bash
-node tools/build-rov-glb.mjs     # → assets/models/rov.glb
-node tools/preview-render.mjs    # → assets/images/rov-poster.png (+ tools/rov-preview.png QA)
+node tools/build-models.mjs     # → assets/models/{rov,submarine,hull}.glb + env-underwater.png
+node tools/preview-render.mjs   # → assets/images/{name}-poster.png (+ tools/{name}-preview.png QA)
 ```
 
 The page degrades gracefully: if the viewer script or WebGL is unavailable, the
-static `rov-poster.png` is shown instead.
+static poster is shown instead, and all page content is plain HTML (no
+JS-gated visibility).
 
 ## Deploy
 
