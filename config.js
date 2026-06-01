@@ -1,19 +1,12 @@
 /**
- * Site configuration — flip comingSoon to false when builds are ready.
+ * Site configuration.
+ *
+ * githubUrl   — overrides the GitHub links on the page (optional; links are also hard-coded).
+ * contactEmail — collaboration / contact address (used in FAQ + footer mailto links).
+ * comingSoon  — informational flag for the current launch state.
  */
 window.INSPECT_ME_CONFIG = {
   comingSoon: true,
-
-  playUrl: "",
-
-  downloads: {
-    windows: "",
-    mac: "",
-    linux: "",
-  },
-
-  releasesPage: "https://github.com/Mathew-Harvey/Inspect-Me/releases/latest",
   githubUrl: "https://github.com/Mathew-Harvey/Inspect-Me",
-
-  contactEmail: "",
+  contactEmail: "mathewharvey@gmail.com",
 };

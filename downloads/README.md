@@ -1,9 +1,9 @@
-# Game builds go here
+# Builds
 
-Drop your platform builds in this folder and point to them from `config.js`:
+The first public release will be distributed via **GitHub Releases**:
 
-- `Inspect-Me-Windows.zip`
-- `Inspect-Me-macOS.zip`
-- `Inspect-Me-Linux.zip`
+https://github.com/Mathew-Harvey/Inspect-Me/releases
 
-Or use full URLs in `config.js` (itch.io, GitHub Releases, S3, etc.).
+This folder is a placeholder for self-hosted build artifacts if needed later.
+When builds are ready, link them from the "Follow" section in `index.html`
+(replace the planned-platform chips with real download buttons).
