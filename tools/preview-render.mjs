@@ -80,4 +80,4 @@ function render(name) {
   console.log(`✓ ${name}: assets/images/${name}-poster.png + tools/${name}-preview.png`);
 }
 
-for (const m of ["rov", "submarine", "hull"]) render(m);
+render("rov");

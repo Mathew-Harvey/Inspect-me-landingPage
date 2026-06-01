@@ -1,4 +1,5 @@
 (() => {
+  const root = document.documentElement;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ── Year ──
@@ -25,55 +26,73 @@
     if (e.key === "Escape" && navToggle?.getAttribute("aria-expanded") === "true") { setMenu(false); navToggle.focus(); }
   });
 
-  // ── 3D model switcher (single viewer, swap src) ──
-  const viewer = document.getElementById("rov-viewer");
-  const MODELS = {
-    rov:       { src: "assets/models/rov.glb",       poster: "assets/images/rov-poster.png",       orbit: "-35deg 72deg 105%", role: "Pilot",   text: "the inspection ROV",        alt: "Interactive 3D model of a light inspection-class ROV" },
-    submarine: { src: "assets/models/submarine.glb", poster: "assets/images/submarine-poster.png", orbit: "-35deg 80deg 110%", role: "Inspect", text: "a submarine hull",          alt: "Interactive 3D model of a submarine — an inspection target" },
-    hull:      { src: "assets/models/hull.glb",      poster: "assets/images/hull-poster.png",      orbit: "-54deg 94deg 100%", role: "Inspect", text: "hull, propeller & rudder",  alt: "Interactive 3D model of a ship hull stern with propeller and rudder" },
+  // ── Theme: Surface (light) ⇄ Dive (dark) ──
+  const themeBtn = document.getElementById("theme-btn");
+  const themeLabel = document.getElementById("theme-btn-label");
+  const diveBtn = document.getElementById("dive-handle");
+  const readout = document.getElementById("dive-readout");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  let depthTween;
+
+  const setReadout = (dark, instant) => {
+    if (!readout) return;
+    const target = dark ? 40 : 0;
+    const word = dark ? "DIVE" : "SURFACE";
+    cancelAnimationFrame(depthTween);
+    if (instant || reduceMotion) { readout.innerHTML = `${word} · ${target}&thinsp;m`; return; }
+    const from = dark ? 0 : 40, dur = 650, t0 = performance.now();
+    const step = (t) => {
+      const k = Math.min(1, (t - t0) / dur);
+      const v = Math.round(from + (target - from) * k);
+      readout.innerHTML = `${word} · ${v}&thinsp;m`;
+      if (k < 1) depthTween = requestAnimationFrame(step);
+    };
+    depthTween = requestAnimationFrame(step);
   };
 
-  if (viewer) {
-    if (reduceMotion) viewer.removeAttribute("auto-rotate");
+  const syncUI = (dark, instant) => {
+    themeBtn?.setAttribute("aria-checked", String(dark));
+    if (themeLabel) themeLabel.textContent = dark ? "Dive" : "Surface";
+    themeColor?.setAttribute("content", dark ? "#06141C" : "#F4F1EA");
+    setReadout(dark, instant);
+  };
 
-    const tabs = [...document.querySelectorAll(".switch-tab")];
-    const caption = document.getElementById("stage-caption");
-    const prefetched = new Set();
+  const applyTheme = (theme) => {
+    root.setAttribute("data-theme", theme);
+    try { localStorage.setItem("im-theme", theme); } catch (e) {}
+    syncUI(theme === "dark", false);
+  };
+  const toggleTheme = () => applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
 
-    const prefetch = (key) => {
-      const m = MODELS[key];
-      if (!m || prefetched.has(key)) return;
-      prefetched.add(key);
-      fetch(m.src).catch(() => {}); // warm the cache so the swap is instant
-    };
+  themeBtn?.addEventListener("click", toggleTheme);
+  diveBtn?.addEventListener("click", toggleTheme);
+  syncUI(root.getAttribute("data-theme") === "dark", true); // initial, no animation
 
-    const select = (key) => {
-      const m = MODELS[key];
-      if (!m || viewer.getAttribute("src") === m.src) return;
-      viewer.setAttribute("poster", m.poster);
-      viewer.setAttribute("camera-orbit", m.orbit);
-      viewer.setAttribute("alt", m.alt);
-      viewer.setAttribute("src", m.src);
-      if (caption) caption.innerHTML = `<span class="stage-role">${m.role}</span> — ${m.text} · drag to orbit`;
-      tabs.forEach((t) => {
-        const on = t.dataset.model === key;
-        t.classList.toggle("is-active", on);
-        t.setAttribute("aria-selected", String(on));
-      });
-    };
+  // follow OS preference if the user hasn't chosen
+  try {
+    if (!localStorage.getItem("im-theme")) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", (e) => applyTheme(e.matches ? "dark" : "light"));
+    }
+  } catch (e) {}
 
-    tabs.forEach((tab, i) => {
-      tab.addEventListener("click", () => select(tab.dataset.model));
-      tab.addEventListener("pointerenter", () => prefetch(tab.dataset.model));
-      tab.addEventListener("focus", () => prefetch(tab.dataset.model));
-      // arrow-key navigation across the tablist
-      tab.addEventListener("keydown", (e) => {
-        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-        e.preventDefault();
-        const next = (i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length;
-        tabs[next].focus();
-        select(tabs[next].dataset.model);
-      });
+  // ── Inspection target capture (one beat of the game loop) ──
+  let captured = 0;
+  const countEl = document.getElementById("capture-count");
+  document.querySelectorAll(".hotspot").forEach((hot) => {
+    hot.addEventListener("click", () => {
+      const fig = hot.closest(".target");
+      if (!fig || fig.classList.contains("captured")) return;
+      fig.classList.add("captured");
+      const cap = fig.querySelector(".t-cap");
+      if (cap) cap.textContent = "✓ captured";
+      captured += 1;
+      if (countEl) countEl.textContent = `${captured} / 3 captured`;
     });
+  });
+
+  // ── Reduced motion: still the model + freeze the refraction shimmer ──
+  if (reduceMotion) {
+    document.getElementById("rov-viewer")?.removeAttribute("auto-rotate");
+    document.querySelector("svg.svg-defs")?.pauseAnimations?.();
   }
 })();

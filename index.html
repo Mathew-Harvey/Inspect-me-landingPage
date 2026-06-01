@@ -1,37 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Inspect-Me — a light inspection-class ROV pilot training simulator. Photo-survey vessel hulls and submerged structures with realistic hydrodynamics, FPV camera control, and a live video stream. In active development." />
-  <meta name="theme-color" content="#050d14" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="Inspect-Me — a light inspection-class ROV pilot training simulator. Deploy, survey, surface: photo-survey ship hulls and submerged structures with realistic hydrodynamics, FPV control, and a live video stream. In active development." />
+  <meta name="theme-color" content="#F4F1EA" />
+  <meta name="color-scheme" content="light dark" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23071e2e'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%235ee7ff' stroke-width='1.3' opacity='.45'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%235ee7ff'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E2A38'/%3E%3Cpath d='M2 18h28' stroke='%230E6E8C' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='12' r='3.4' fill='%23E8A13C'/%3E%3C/svg%3E" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Inspect-Me — Light Inspection-Class ROV Pilot Simulator" />
-  <meta property="og:description" content="Train like operators in the field — photo-survey hulls and submerged structures with a compact inspection ROV. In active development." />
+  <meta property="og:title" content="Inspect-Me — Deploy. Survey. Surface." />
+  <meta property="og:description" content="The training simulator for light inspection-class ROV pilots. Photo-survey hulls and submerged structures. In active development." />
   <meta property="og:image" content="assets/images/hero-scene.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Inspect-Me — ROV Pilot Simulator" />
-  <meta name="twitter:description" content="A training sim for compact inspection ROVs. In active development." />
+  <meta name="twitter:title" content="Inspect-Me — Deploy. Survey. Surface." />
+  <meta name="twitter:description" content="The training simulator for light inspection-class ROV pilots." />
   <meta name="twitter:image" content="assets/images/hero-scene.png" />
 
-  <title>Inspect-Me — Light Inspection-Class ROV Pilot Simulator</title>
+  <title>Inspect-Me — Deploy. Survey. Surface.</title>
+
+  <!-- set theme before paint (no flash) -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("im-theme");
+        if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Interactive 3D model (progressive enhancement). model-viewer is vendored locally
-       (assets/vendor/) so there is no runtime CDN dependency. -->
   <script type="module" src="assets/vendor/model-viewer.min.js"></script>
   <script src="config.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- SVG filters: the waterline refraction -->
+  <svg class="svg-defs" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="refract" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.014 0.05" numOctaves="2" seed="7" result="noise">
+          <animate attributeName="baseFrequency" dur="14s" values="0.014 0.05; 0.018 0.06; 0.014 0.05" repeatCount="indefinite" />
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
 
   <header class="site-header" id="top">
     <nav class="nav" aria-label="Primary">
@@ -40,13 +61,16 @@
         <span class="logo-text">Inspect-Me</span>
       </a>
       <ul class="nav-links">
-        <li><a href="#preview">Preview</a></li>
+        <li><a href="#survey">The survey</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#rov-class">ROV class</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <div class="nav-end">
-        <span class="status-tag"><span class="status-dot" aria-hidden="true"></span>In development</span>
+        <button class="theme-btn" id="theme-btn" type="button" role="switch" aria-checked="false" aria-label="Toggle dark (dive) mode">
+          <span class="theme-btn-track"><span class="theme-btn-thumb"></span></span>
+          <span class="theme-btn-label" id="theme-btn-label">Surface</span>
+        </button>
         <a class="nav-github" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer" aria-label="Inspect-Me on GitHub">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
         </a>
@@ -58,7 +82,7 @@
   </header>
 
   <div class="mobile-menu" id="mobile-menu" hidden>
-    <a href="#preview">Preview</a>
+    <a href="#survey">The survey</a>
     <a href="#features">Features</a>
     <a href="#rov-class">ROV class</a>
     <a href="#faq">FAQ</a>
@@ -66,109 +90,170 @@
   </div>
 
   <main id="main">
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">Light inspection-class ROV simulator</p>
-        <h1 class="hero-title">Pilot the depths.<br />Inspect what others can't.</h1>
-        <p class="lede">
-          A training sim for compact inspection ROVs — realistic hydrodynamics, FPV camera
-          control, photo-survey missions, and a live video stream. In active development.
+    <!-- ───────────── HERO: the waterline ───────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-sky">
+        <p class="titleblock">
+          <span>INSPECT-ME</span>
+          <span class="titleblock-mid">LIGHT INSPECTION-CLASS ROV · TRAINING SIM</span>
+          <span>STATION 04 · 47°12′N</span>
         </p>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">Star on GitHub</a>
-          <a class="btn-text" href="#preview">See the preview <span aria-hidden="true">→</span></a>
-        </div>
-        <dl class="spec-row">
-          <div><dt>Piloting</dt><dd>4-DOF — surge · sway · heave · yaw</dd></div>
-          <div><dt>Missions</dt><dd>Photo-survey &amp; score</dd></div>
-          <div><dt>Streaming</dt><dd>MJPEG over HTTP</dd></div>
-        </dl>
+        <h1 class="hero-title" id="hero-title">
+          Deploy. Survey.<br /><span class="surface-word">Surface.</span>
+        </h1>
       </div>
 
-      <div class="hero-stage">
-        <div class="stage-glow" aria-hidden="true"></div>
-        <model-viewer
-          id="rov-viewer"
-          class="rov-viewer"
-          src="assets/models/rov.glb"
-          alt="Interactive 3D model of a light inspection-class ROV"
-          poster="assets/images/rov-poster.png"
-          environment-image="assets/models/env-underwater.png"
-          camera-controls
-          touch-action="pan-y"
-          camera-orbit="-35deg 72deg 105%"
-          interaction-prompt="none"
-          auto-rotate
-          rotation-per-second="18deg"
-          auto-rotate-delay="500"
-          shadow-intensity="0.6"
-          shadow-softness="1"
-          exposure="1.25"
-          tone-mapping="aces"
-          disable-zoom
-          loading="eager"
-          reveal="auto">
-          <img slot="poster" class="rov-fallback" src="assets/images/rov-poster.png"
-               alt="3D model of a light inspection-class ROV" />
-        </model-viewer>
-        <div class="switch" role="tablist" aria-label="3D model selector">
-          <button class="switch-tab is-active" role="tab" aria-selected="true" data-model="rov">ROV</button>
-          <button class="switch-tab" role="tab" aria-selected="false" data-model="submarine">Submarine</button>
-          <button class="switch-tab" role="tab" aria-selected="false" data-model="hull">Hull</button>
+      <div class="waterline" aria-hidden="true">
+        <div class="waterline-rule"></div>
+        <button class="dive-handle" id="dive-handle" type="button" aria-hidden="true" tabindex="-1">
+          <span class="dive-handle-grip"></span>
+          <span class="dive-handle-label" id="dive-readout">SURFACE · 0&thinsp;m</span>
+        </button>
+      </div>
+
+      <div class="hero-sea">
+        <div class="caustics" aria-hidden="true"></div>
+        <p class="hero-reflection" aria-hidden="true">Deploy. Survey.<br />Surface.</p>
+
+        <div class="hero-sea-inner">
+          <div class="hero-lede-wrap">
+            <p class="hero-lede">Pilot a light-inspection ROV. Photo-survey hulls and submerged
+              structures. Find and capture every target — and score the dive.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">Star on GitHub</a>
+              <a class="btn-text" href="#survey">See the survey <span aria-hidden="true">→</span></a>
+            </div>
+            <p class="hero-foot">In active development · first release free to play · coming 2026</p>
+          </div>
+
+          <div class="hero-stage">
+            <model-viewer
+              id="rov-viewer"
+              class="rov-viewer"
+              src="assets/models/rov.glb"
+              alt="Interactive 3D model of a light inspection-class ROV"
+              poster="assets/images/rov-poster.png"
+              environment-image="assets/models/env-underwater.png"
+              camera-controls
+              touch-action="pan-y"
+              camera-orbit="-32deg 76deg 105%"
+              interaction-prompt="none"
+              auto-rotate
+              rotation-per-second="16deg"
+              auto-rotate-delay="500"
+              shadow-intensity="0.5"
+              exposure="1.3"
+              tone-mapping="aces"
+              disable-zoom
+              loading="eager"
+              reveal="auto">
+              <img slot="poster" class="rov-fallback" src="assets/images/rov-poster.png" alt="3D model of a light inspection-class ROV" />
+            </model-viewer>
+            <p class="stage-tag">DRAG TO ORBIT · THE ROV YOU PILOT</p>
+          </div>
+
+          <dl class="depth-ladder" aria-label="Telemetry readout">
+            <div><dt>DEPTH</dt><dd>12.4 m</dd></div>
+            <div><dt>HDG</dt><dd>047°</dd></div>
+            <div><dt>ALT</dt><dd>3.1 m</dd></div>
+            <div><dt>VEL</dt><dd>0.4 kn</dd></div>
+          </dl>
         </div>
-        <p class="stage-caption" id="stage-caption"><span class="stage-role">Pilot</span> — the inspection ROV · drag to orbit</p>
       </div>
     </section>
 
-    <section class="section" id="preview">
+    <!-- ───────────── THE SURVEY: mission + inspection targets ───────────── -->
+    <section class="section" id="survey">
       <div class="container">
         <header class="section-head">
-          <p class="eyebrow">Early preview</p>
-          <h2>A first look at what's in the water.</h2>
-          <p class="section-sub">Work-in-progress shots from the current build — visuals and missions are still evolving.</p>
+          <p class="eyebrow">The survey</p>
+          <h2>Every dive is a deliverable.</h2>
+          <p class="section-sub">Each mission drops you on a structure that needs inspecting. Fly the hull,
+            find every General-Arrangement component on the checklist, and photograph it cleanly. Coverage and
+            capture quality drive your score — just like a real survey report.</p>
         </header>
-        <div class="preview-gallery">
-          <figure class="preview-frame">
-            <img src="assets/images/menu-preview.png" alt="Inspect-Me main menu with Start Mission and Controls &amp; Bindings; keyboard, mouse and joystick support" loading="lazy" />
-            <figcaption>Main menu · keyboard, mouse &amp; joystick</figcaption>
+
+        <p class="targets-intro"><span class="mono">SHEET 01</span> — Tap a hotspot to capture a target.
+          <span class="capture-count" id="capture-count">0 / 3 captured</span></p>
+
+        <div class="targets">
+          <!-- Propeller & rudder -->
+          <figure class="target" data-target="prop">
+            <div class="target-plate">
+              <svg viewBox="0 0 220 170" class="bp" role="img" aria-label="Blueprint: propeller and rudder">
+                <g class="bp-line">
+                  <line x1="20" y1="150" x2="200" y2="150" class="bp-faint" />
+                  <line x1="150" y1="20" x2="150" y2="150" />
+                  <rect x="150" y="55" width="20" height="80" rx="3" />
+                  <line x1="70" y1="85" x2="150" y2="85" />
+                  <circle cx="70" cy="85" r="42" />
+                  <g class="bp-blades">
+                    <path d="M70 85 Q86 40 104 52 Q88 70 70 85Z" />
+                    <path d="M70 85 Q115 101 103 119 Q85 100 70 85Z" />
+                    <path d="M70 85 Q54 130 36 118 Q52 100 70 85Z" />
+                    <path d="M70 85 Q25 69 37 51 Q55 70 70 85Z" />
+                  </g>
+                  <circle cx="70" cy="85" r="8" class="bp-hub" />
+                </g>
+                <text class="bp-tag" x="70" y="146">PROPELLER · Ø0.5 m</text>
+                <text class="bp-tag" x="160" y="44" text-anchor="middle">RUDDER</text>
+              </svg>
+              <button class="hotspot" data-hot="prop" style="left:31.8%;top:50%" aria-label="Capture the propeller — inspection target"></button>
+            </div>
+            <figcaption><span class="t-no">01</span> Propeller &amp; rudder<span class="t-cap" aria-live="polite"></span></figcaption>
           </figure>
-          <figure class="preview-frame">
-            <img src="assets/images/hero-scene.png" alt="An inspection target — a submarine hull at the waterline in the harbour environment" loading="lazy" />
-            <figcaption>Inspection target · vessel hull survey</figcaption>
+
+          <!-- Sea chest & anode -->
+          <figure class="target" data-target="seachest">
+            <div class="target-plate">
+              <svg viewBox="0 0 220 170" class="bp" role="img" aria-label="Blueprint: sea chest and anode">
+                <g class="bp-line">
+                  <path d="M16 44 Q110 24 204 44" class="bp-faint" />
+                  <line x1="16" y1="60" x2="204" y2="60" />
+                  <rect x="62" y="60" width="96" height="60" rx="2" />
+                  <line x1="78" y1="60" x2="78" y2="120" />
+                  <line x1="94" y1="60" x2="94" y2="120" />
+                  <line x1="110" y1="60" x2="110" y2="120" />
+                  <line x1="126" y1="60" x2="126" y2="120" />
+                  <line x1="142" y1="60" x2="142" y2="120" />
+                  <rect x="30" y="92" width="22" height="14" rx="2" class="bp-hub" />
+                </g>
+                <text class="bp-tag" x="110" y="138" text-anchor="middle">SEA CHEST · GRATING</text>
+                <text class="bp-tag" x="41" y="120" text-anchor="middle">ANODE</text>
+              </svg>
+              <button class="hotspot" data-hot="seachest" style="left:18.6%;top:58%" aria-label="Capture the sacrificial anode — inspection target"></button>
+            </div>
+            <figcaption><span class="t-no">02</span> Sea chest &amp; anode<span class="t-cap" aria-live="polite"></span></figcaption>
           </figure>
-          <figure class="preview-frame">
-            <img src="assets/images/dev-scene.png" alt="Development scene showing a full vessel hull on the survey grid" loading="lazy" />
-            <figcaption>Environment blockout · work in progress</figcaption>
+
+          <!-- Pile & marine growth -->
+          <figure class="target" data-target="pile">
+            <div class="target-plate">
+              <svg viewBox="0 0 220 170" class="bp" role="img" aria-label="Blueprint: harbour pile with marine growth">
+                <g class="bp-line">
+                  <line x1="20" y1="46" x2="200" y2="46" class="bp-faint" />
+                  <line x1="20" y1="150" x2="200" y2="150" class="bp-faint" />
+                  <rect x="96" y="30" width="28" height="120" rx="6" />
+                  <line x1="110" y1="30" x2="110" y2="150" class="bp-faint" />
+                  <g class="bp-growth">
+                    <circle cx="98" cy="96" r="5" /><circle cx="120" cy="104" r="6" />
+                    <circle cx="100" cy="116" r="4" /><circle cx="122" cy="86" r="4" />
+                    <circle cx="112" cy="124" r="5" /><circle cx="98" cy="80" r="4" />
+                  </g>
+                </g>
+                <text class="bp-tag" x="110" y="166" text-anchor="middle">PILE · MARINE GROWTH</text>
+                <text class="bp-tag" x="150" y="44" text-anchor="middle">WATERLINE</text>
+              </svg>
+              <button class="hotspot" data-hot="pile" style="left:50%;top:61%" aria-label="Capture the marine growth — inspection target"></button>
+            </div>
+            <figcaption><span class="t-no">03</span> Pile &amp; marine growth<span class="t-cap" aria-live="polite"></span></figcaption>
           </figure>
         </div>
       </div>
     </section>
 
-    <section class="section" id="mission">
-      <div class="container split">
-        <div class="split-copy">
-          <p class="eyebrow">Your mission</p>
-          <h2>Run real survey jobs — without leaving dry land.</h2>
-          <p>
-            Each mission drops you on a vessel that needs inspecting. Fly the ROV around the hull,
-            find every General-Arrangement component on the checklist, and photograph it cleanly.
-            The sim scores your coverage and the quality of each capture — like a real survey deliverable.
-          </p>
-          <ul class="check-list">
-            <li>Pick a vessel and deploy from the surface</li>
-            <li>Hold attitude while maneuvering in drag and current</li>
-            <li>Find &amp; photograph each inspection target for points</li>
-            <li>Read live depth, heading, altitude &amp; velocity on the FPV HUD</li>
-          </ul>
-        </div>
-        <figure class="split-media">
-          <img src="assets/images/menu-preview.png" alt="Inspect-Me training menu screenshot" loading="lazy" />
-          <figcaption>ROV pilot training · early build</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section" id="features">
+    <!-- ───────────── FEATURES ───────────── -->
+    <section class="section section-alt" id="features">
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">Built for realism</p>
@@ -186,6 +271,7 @@
       </div>
     </section>
 
+    <!-- ───────────── ROV CLASS ───────────── -->
     <section class="section" id="rov-class">
       <div class="container">
         <header class="section-head">
@@ -225,35 +311,40 @@
       </div>
     </section>
 
-    <section class="section" id="controls">
-      <div class="container split">
-        <figure class="split-media controls-media">
-          <div class="stick"><span class="stick-dot"></span></div>
-          <div class="stick"><span class="stick-dot stick-dot-b"></span></div>
-          <figcaption><span>Left — surge / yaw</span><span>Right — heave / sway</span></figcaption>
-        </figure>
-        <div class="split-copy">
-          <p class="eyebrow">Controls</p>
-          <h2>Pick up a gamepad. You're already halfway there.</h2>
-          <p>
-            Inspect-Me ships with industry-standard dual-stick mapping and a full rebind menu.
-            Keyboard pilots get the same axes — every control surface is remappable on the fly.
-          </p>
-          <p class="muted">Press <kbd>Esc</kbd> in-game to return to the menu and adjust bindings anytime.</p>
+    <!-- ───────────── PREVIEW ───────────── -->
+    <section class="section section-alt" id="preview">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Early preview</p>
+          <h2>A first look at what's in the water.</h2>
+          <p class="section-sub">Work-in-progress shots from the current build — visuals and missions are still evolving.</p>
+        </header>
+        <div class="preview-gallery">
+          <figure class="preview-frame">
+            <img src="assets/images/menu-preview.png" alt="Inspect-Me main menu with Start Mission and Controls &amp; Bindings" loading="lazy" />
+            <figcaption>Main menu · keyboard, mouse &amp; joystick</figcaption>
+          </figure>
+          <figure class="preview-frame">
+            <img src="assets/images/hero-scene.png" alt="An inspection target — a submarine hull at the waterline" loading="lazy" />
+            <figcaption>Inspection target · vessel hull survey</figcaption>
+          </figure>
+          <figure class="preview-frame">
+            <img src="assets/images/dev-scene.png" alt="Development scene showing a full vessel hull on the survey grid" loading="lazy" />
+            <figcaption>Environment blockout · work in progress</figcaption>
+          </figure>
         </div>
       </div>
     </section>
 
+    <!-- ───────────── FOLLOW ───────────── -->
     <section class="section" id="follow">
       <div class="container">
         <div class="follow">
           <div>
             <p class="eyebrow">Launching soon</p>
             <h2>Not ready to dive in yet — but close.</h2>
-            <p class="section-sub">
-              Inspect-Me is in active development and the first release will be free to play.
-              Star or watch the project on GitHub to know the moment the build drops.
-            </p>
+            <p class="section-sub">Inspect-Me is in active development and the first release will be free to play.
+              Star or watch the project on GitHub to know the moment the build drops.</p>
           </div>
           <div class="follow-side">
             <a class="btn btn-primary" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">Star on GitHub</a>
@@ -263,7 +354,8 @@
       </div>
     </section>
 
-    <section class="section" id="faq">
+    <!-- ───────────── FAQ ───────────── -->
+    <section class="section section-alt" id="faq">
       <div class="container narrow">
         <header class="section-head">
           <p class="eyebrow">FAQ</p>
