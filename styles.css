@@ -174,7 +174,12 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .dive-handle-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--on-water); white-space: nowrap; }
 
 .hero-sea {
-  position: relative; background: var(--bg-bottom); overflow: hidden;
+  position: relative; overflow: hidden;
+  background-color: var(--bg-bottom);
+  background-image: linear-gradient(to bottom,
+    color-mix(in srgb, var(--teal) 26%, var(--bg-bottom)) 0%,
+    var(--bg-bottom) 30%,
+    color-mix(in srgb, #000 32%, var(--bg-bottom)) 100%);
   padding: 3rem 0 4rem; transition: background-color 0.6s var(--ease);
 }
 /* a real vessel, looming in the deep below the waterline */
@@ -187,6 +192,51 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   mask-image: radial-gradient(125% 92% at 50% 100%, #000 32%, transparent 78%);
 }
 [data-theme="dark"] .hero-deep img { opacity: 0.5; }
+
+/* the luminous, rippling underside of the surface — sits just below the line */
+.water-surface {
+  position: absolute; top: 0; left: 0; right: 0; height: 180px; z-index: 0; pointer-events: none;
+  mix-blend-mode: screen; opacity: 0.92;
+  background:
+    linear-gradient(to bottom,
+      color-mix(in srgb, #eafcff 80%, var(--teal)) 0%,
+      color-mix(in srgb, var(--teal) 62%, transparent) 10%,
+      transparent 64%),
+    repeating-linear-gradient(2deg,
+      transparent 0 30px,
+      color-mix(in srgb, #cdf2ff 40%, transparent) 33px 37px,
+      transparent 40px 74px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 90%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 90%);
+  filter: url(#surface-ripple);
+  animation: surface-flow 18s ease-in-out infinite alternate;
+}
+@keyframes surface-flow {
+  from { background-position: 0 0, 0 -7px; }
+  to   { background-position: 0 0, 0 7px; }
+}
+
+/* god rays falling from the surface into the deep */
+.light-rays {
+  position: absolute; top: 0; left: -10%; right: -10%; height: 80%; z-index: 0; pointer-events: none;
+  opacity: 0.5; mix-blend-mode: screen; transform-origin: 50% 0;
+  background:
+    repeating-linear-gradient(99deg,
+      transparent 0 64px,
+      color-mix(in srgb, #bfe6f5 16%, transparent) 64px 82px,
+      transparent 82px 166px),
+    repeating-linear-gradient(93deg,
+      transparent 0 120px,
+      color-mix(in srgb, #e6f7ff 11%, transparent) 120px 134px,
+      transparent 134px 252px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 42%, transparent 86%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 42%, transparent 86%);
+  animation: ray-sway 15s ease-in-out infinite alternate;
+}
+@keyframes ray-sway {
+  from { transform: skewX(-2.5deg) translateX(-1.4%); opacity: 0.4; }
+  to   { transform: skewX(2.5deg) translateX(1.4%); opacity: 0.58; }
+}
 .caustics {
   position: absolute; inset: 0; pointer-events: none; opacity: 0.6; mix-blend-mode: screen;
   background:
