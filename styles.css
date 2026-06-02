@@ -179,7 +179,10 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   top: calc(var(--header-h) + var(--sky-h));
   right: max(12px, calc((100% - var(--maxw)) / 2 - 8px));
   width: min(540px, 52%);
-  transform: translateY(-62%); /* sit the ship's waterline on the page waterline */
+  /* sit the ship's waterline on the page waterline, pivoting near the bow to
+     lift the (lower-in-frame) stern so the hull sits level on the water */
+  transform-origin: 26% 60%;
+  transform: translateY(-62%) rotate(-3.5deg);
 }
 .hero-float img { width: 100%; height: auto; display: block; }
 
