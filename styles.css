@@ -182,17 +182,6 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
     color-mix(in srgb, #000 32%, var(--bg-bottom)) 100%);
   padding: 3rem 0 4rem; transition: background-color 0.6s var(--ease);
 }
-/* a real vessel, looming in the deep below the waterline */
-.hero-deep { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.hero-deep img {
-  position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
-  width: min(1400px, 138%); max-width: none; height: auto;
-  opacity: 0.4; filter: brightness(0.72) saturate(0.82);
-  -webkit-mask-image: radial-gradient(125% 92% at 50% 100%, #000 32%, transparent 78%);
-  mask-image: radial-gradient(125% 92% at 50% 100%, #000 32%, transparent 78%);
-}
-[data-theme="dark"] .hero-deep img { opacity: 0.5; }
-
 /* the luminous, rippling underside of the surface — sits just below the line */
 .water-surface {
   position: absolute; top: 0; left: 0; right: 0; height: 180px; z-index: 0; pointer-events: none;
