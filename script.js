@@ -1,227 +1,98 @@
 (() => {
-  const config = window.INSPECT_ME_CONFIG || {};
-  const comingSoon = config.comingSoon !== false;
-  const downloads = config.downloads || {};
-  const playUrl = config.playUrl || "";
-  const releasesPage = config.releasesPage || "";
-  const githubUrl = config.githubUrl || releasesPage.replace(/\/releases.*$/, "") || "";
-
-  if (githubUrl) {
-    const githubBtn = document.getElementById("btn-github");
-    if (githubBtn) githubBtn.href = githubUrl;
-  }
+  const root = document.documentElement;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ── Year ──
-  document.getElementById("year").textContent = new Date().getFullYear();
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // ── Header scroll ──
+  // ── Header scrolled state ──
   const header = document.querySelector(".site-header");
-  const stickyCta = document.getElementById("sticky-cta");
-  const hero = document.querySelector(".hero");
-
-  const onScroll = () => {
-    const y = window.scrollY;
-    header.classList.toggle("scrolled", y > 40);
-
-    if (hero) {
-      const heroBottom = hero.offsetTop + hero.offsetHeight * 0.6;
-      stickyCta.classList.toggle("visible", y > heroBottom);
-      stickyCta.setAttribute("aria-hidden", y <= heroBottom ? "true" : "false");
-    }
-  };
-
+  const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 24);
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
   // ── Mobile nav ──
   const navToggle = document.querySelector(".nav-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
-
-  navToggle?.addEventListener("click", () => {
-    const open = navToggle.getAttribute("aria-expanded") === "true";
-    navToggle.setAttribute("aria-expanded", String(!open));
-    mobileMenu.hidden = open;
+  const setMenu = (open) => {
+    if (!navToggle || !mobileMenu) return;
+    navToggle.setAttribute("aria-expanded", String(open));
+    mobileMenu.hidden = !open;
+  };
+  navToggle?.addEventListener("click", () => setMenu(navToggle.getAttribute("aria-expanded") !== "true"));
+  mobileMenu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navToggle?.getAttribute("aria-expanded") === "true") { setMenu(false); navToggle.focus(); }
   });
 
-  mobileMenu?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mobileMenu.hidden = true;
-      navToggle.setAttribute("aria-expanded", "false");
+  // ── Theme: Surface (light) ⇄ Dive (dark) ──
+  const themeBtn = document.getElementById("theme-btn");
+  const themeLabel = document.getElementById("theme-btn-label");
+  const diveBtn = document.getElementById("dive-handle");
+  const readout = document.getElementById("dive-readout");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  let depthTween;
+
+  const setReadout = (dark, instant) => {
+    if (!readout) return;
+    const target = dark ? 40 : 0;
+    const word = dark ? "DIVE" : "SURFACE";
+    cancelAnimationFrame(depthTween);
+    if (instant || reduceMotion) { readout.innerHTML = `${word} · ${target}&thinsp;m`; return; }
+    const from = dark ? 0 : 40, dur = 650, t0 = performance.now();
+    const step = (t) => {
+      const k = Math.min(1, (t - t0) / dur);
+      const v = Math.round(from + (target - from) * k);
+      readout.innerHTML = `${word} · ${v}&thinsp;m`;
+      if (k < 1) depthTween = requestAnimationFrame(step);
+    };
+    depthTween = requestAnimationFrame(step);
+  };
+
+  const syncUI = (dark, instant) => {
+    themeBtn?.setAttribute("aria-checked", String(dark));
+    if (themeLabel) themeLabel.textContent = dark ? "Dive" : "Surface";
+    themeColor?.setAttribute("content", dark ? "#06141C" : "#F4F1EA");
+    setReadout(dark, instant);
+  };
+
+  const applyTheme = (theme) => {
+    root.setAttribute("data-theme", theme);
+    try { localStorage.setItem("im-theme", theme); } catch (e) {}
+    syncUI(theme === "dark", false);
+  };
+  const toggleTheme = () => applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+
+  themeBtn?.addEventListener("click", toggleTheme);
+  diveBtn?.addEventListener("click", toggleTheme);
+  syncUI(root.getAttribute("data-theme") === "dark", true); // initial, no animation
+
+  // follow OS preference if the user hasn't chosen
+  try {
+    if (!localStorage.getItem("im-theme")) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", (e) => applyTheme(e.matches ? "dark" : "light"));
+    }
+  } catch (e) {}
+
+  // ── Inspection target capture (one beat of the game loop) ──
+  let captured = 0;
+  const countEl = document.getElementById("capture-count");
+  document.querySelectorAll(".hotspot").forEach((hot) => {
+    hot.addEventListener("click", () => {
+      const fig = hot.closest(".target");
+      if (!fig || fig.classList.contains("captured")) return;
+      fig.classList.add("captured");
+      const cap = fig.querySelector(".t-cap");
+      if (cap) cap.textContent = "✓ captured";
+      captured += 1;
+      if (countEl) countEl.textContent = `${captured} / 3 captured`;
     });
   });
 
-  // ── Cursor glow ──
-  const glow = document.querySelector(".cursor-glow");
-  if (glow && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    window.addEventListener("pointermove", (e) => {
-      glow.style.left = `${e.clientX}px`;
-      glow.style.top = `${e.clientY}px`;
-    }, { passive: true });
-  }
-
-  // ── Scroll reveal ──
-  const revealEls = document.querySelectorAll(".reveal");
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-  );
-  revealEls.forEach((el) => revealObserver.observe(el));
-
-  // ── Toast ──
-  const toast = document.getElementById("toast");
-  let toastTimer;
-
-  function showToast(message) {
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 4200);
-  }
-
-  // ── Download / play logic ──
-  function resolveUrl(platform) {
-    if (platform === "play") return playUrl;
-    return downloads[platform] || "";
-  }
-
-  function openLink(url) {
-    if (!url) return false;
-    window.open(url, url.startsWith("http") ? "_blank" : "_self");
-    return true;
-  }
-
-  function handlePlatform(platform) {
-    if (comingSoon) {
-      showToast("Coming soon — star the repo on GitHub for launch updates.");
-      return;
-    }
-
-    const url = resolveUrl(platform);
-    if (url) {
-      openLink(url);
-      return;
-    }
-
-    if (releasesPage) {
-      openLink(releasesPage);
-      showToast("Opening releases page…");
-      return;
-    }
-
-    showToast("Download not available yet.");
-  }
-
-  document.querySelectorAll("[data-platform]").forEach((btn) => {
-    btn.addEventListener("click", () => handlePlatform(btn.dataset.platform));
-  });
-
-  document.querySelectorAll('[data-action="primary-cta"]').forEach((link) => {
-    link.addEventListener("click", (e) => {
-      if (comingSoon) return;
-
-      if (playUrl) {
-        e.preventDefault();
-        openLink(playUrl);
-        return;
-      }
-
-      const firstDownload = downloads.windows || downloads.mac || downloads.linux;
-      if (firstDownload) {
-        e.preventDefault();
-        openLink(firstDownload);
-        return;
-      }
-
-      if (releasesPage) {
-        e.preventDefault();
-        openLink(releasesPage);
-      }
-    });
-  });
-
-  // ── Update download UI state ──
-  const statusEl = document.getElementById("download-status");
-
-  function updateDownloadStatus() {
-    if (!statusEl) return;
-
-    if (comingSoon) {
-      statusEl.textContent = "First public release coming soon.";
-      return;
-    }
-
-    const parts = [];
-    if (playUrl) parts.push("Browser play ready");
-    if (downloads.windows) parts.push("Windows ready");
-    if (downloads.mac) parts.push("macOS ready");
-    if (downloads.linux) parts.push("Linux ready");
-    if (releasesPage && !parts.length) parts.push("Releases page linked");
-
-    statusEl.textContent = parts.length
-      ? parts.join(" · ")
-      : "Add build URLs in config.js to enable one-click download.";
-  }
-
-  updateDownloadStatus();
-
-  // ── Particle canvas ──
-  const canvas = document.getElementById("particle-canvas");
-  if (canvas && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const ctx = canvas.getContext("2d");
-    let particles = [];
-
-    function resize() {
-      canvas.width = canvas.offsetWidth * devicePixelRatio;
-      canvas.height = canvas.offsetHeight * devicePixelRatio;
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-    }
-
-    function spawn() {
-      particles = Array.from({ length: 55 }, () => ({
-        x: Math.random() * canvas.offsetWidth,
-        y: Math.random() * canvas.offsetHeight,
-        r: Math.random() * 2.5 + 0.5,
-        speed: Math.random() * 0.4 + 0.15,
-        drift: (Math.random() - 0.5) * 0.3,
-        alpha: Math.random() * 0.35 + 0.1,
-      }));
-    }
-
-    function tick() {
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-
-      particles.forEach((p) => {
-        p.y -= p.speed;
-        p.x += p.drift;
-
-        if (p.y < -10) {
-          p.y = canvas.offsetHeight + 10;
-          p.x = Math.random() * canvas.offsetWidth;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(180, 230, 255, ${p.alpha})`;
-        ctx.fill();
-      });
-
-      requestAnimationFrame(tick);
-    }
-
-    resize();
-    spawn();
-    tick();
-    window.addEventListener("resize", () => {
-      resize();
-      spawn();
-    });
+  // ── Reduced motion: still the model + freeze the refraction shimmer ──
+  if (reduceMotion) {
+    document.getElementById("rov-viewer")?.removeAttribute("auto-rotate");
+    document.querySelector("svg.svg-defs")?.pauseAnimations?.();
   }
 })();
