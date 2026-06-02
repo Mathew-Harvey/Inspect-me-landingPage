@@ -163,7 +163,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   opacity: 0.95;
 }
 .dive-handle {
-  position: absolute; top: -13px; right: max(24px, calc((100% - var(--maxw)) / 2 + 24px));
+  position: absolute; top: -13px; left: max(24px, calc((100% - var(--maxw)) / 2 + 24px));
   display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.7rem;
   background: var(--bg-bottom); border: 1px solid color-mix(in srgb, var(--teal) 50%, transparent); border-radius: 999px;
   cursor: pointer; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
@@ -178,9 +178,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   position: absolute; z-index: 2; pointer-events: none;
   top: calc(var(--header-h) + var(--sky-h));
   right: max(12px, calc((100% - var(--maxw)) / 2 - 8px));
-  width: min(520px, 50%);
-  transform: translateY(-59%);
-  filter: drop-shadow(0 14px 24px rgba(2, 12, 18, 0.5));
+  width: min(540px, 52%);
+  transform: translateY(-62%); /* sit the ship's waterline on the page waterline */
 }
 .hero-float img { width: 100%; height: auto; display: block; }
 

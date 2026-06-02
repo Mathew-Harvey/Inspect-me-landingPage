@@ -68,21 +68,33 @@ async function run() {
 
 /**
  * The hero's floating vessel. image5 is an above-water beauty shot on a dark
- * render background; a surface vessel has to sit ON the waterline (topsides in
- * the air, hull in the water), so it needs a transparent background to drop
- * cleanly onto both the light "sky" and the dark water. We key out the dark
- * navy backdrop by luminance — the bright ship stays, the dark water/sky goes,
- * and the lower hull fades right where it meets the waterline.
+ * render background, shot at a 3/4 angle — so the ship's waterline runs
+ * diagonally. To float it on a flat page waterline we:
+ *   1. luminance-key the bright ship out of the dark sky, AND
+ *   2. KEEP a feathered band of the ship's own (dark) water from the waterline
+ *      down, so the hull sits IN water that blends into our dark sea.
+ * That second part is what stops the low stern from reading as "sinking" and
+ * the high bow from punching a sky-notch through the surface. The kept water is
+ * faded out toward the sides and bottom so it melts into the page's sea.
  */
 async function makeHeroShip() {
   const smooth = (e0, e1, x) => { const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); };
   const { data, info } = await sharp(join(SRC, "image5.png")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h, channels: c } = info;
   const out = Buffer.from(data);
-  for (let i = 0; i < w * h; i++) {
-    const o = i * c;
-    const lum = 0.299 * data[o] + 0.587 * data[o + 1] + 0.114 * data[o + 2];
-    out[o + 3] = Math.round(smooth(46, 80, lum) * 255);
+  for (let y = 0; y < h; y++) {
+    const yn = y / h;
+    const band = smooth(0.50, 0.64, yn);          // start keeping water at the waterline
+    const bottomFade = smooth(0.0, 0.34, 1 - yn);  // …and fade it out toward the bottom
+    for (let x = 0; x < w; x++) {
+      const o = (y * w + x) * c;
+      const lum = 0.299 * data[o] + 0.587 * data[o + 1] + 0.114 * data[o + 2];
+      const key = smooth(46, 80, lum);             // the bright ship
+      const xn = x / w;
+      const sideFade = smooth(0.0, 0.1, xn) * smooth(0.0, 0.1, 1 - xn);
+      const water = band * bottomFade * sideFade;  // its own water, feathered to blend
+      out[o + 3] = Math.round(Math.min(1, Math.max(key, water)) * 255);
+    }
   }
   const cut = sharp(out, { raw: { width: w, height: h, channels: c } });
   await cut.clone().webp({ quality: 86, effort: 6, alphaQuality: 90 }).toFile(join(OUT, "hero-ship.webp"));
