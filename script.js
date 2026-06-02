@@ -75,18 +75,22 @@
     }
   } catch (e) {}
 
-  // ── Inspection target capture (one beat of the game loop) ──
-  let captured = 0;
+  // ── Inspection capture: one beat of the real survey loop ──
+  const hotspots = Array.from(document.querySelectorAll(".hotspot"));
   const countEl = document.getElementById("capture-count");
-  document.querySelectorAll(".hotspot").forEach((hot) => {
+  const total = hotspots.length;
+  let captured = 0;
+  hotspots.forEach((hot) => {
     hot.addEventListener("click", () => {
-      const fig = hot.closest(".target");
-      if (!fig || fig.classList.contains("captured")) return;
-      fig.classList.add("captured");
-      const cap = fig.querySelector(".t-cap");
-      if (cap) cap.textContent = "✓ captured";
+      if (hot.classList.contains("is-captured")) return;
+      hot.classList.add("is-captured");
       captured += 1;
-      if (countEl) countEl.textContent = `${captured} / 3 captured`;
+      if (countEl) {
+        countEl.textContent =
+          captured >= total
+            ? `✓ ${captured} / ${total} sampled · 26 on the full hull`
+            : `${captured} / ${total} sampled`;
+      }
     });
   });
 

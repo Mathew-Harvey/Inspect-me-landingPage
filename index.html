@@ -11,12 +11,14 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Inspect-Me — Deploy. Survey. Surface." />
-  <meta property="og:description" content="The training simulator for light inspection-class ROV pilots. Photo-survey hulls and submerged structures. In active development." />
-  <meta property="og:image" content="assets/images/hero-scene.png" />
+  <meta property="og:description" content="The training simulator for light inspection-class ROV pilots. Photo-survey ship hulls and submerged structures. In active development." />
+  <meta property="og:image" content="assets/images/og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Inspect-Me — Deploy. Survey. Surface." />
   <meta name="twitter:description" content="The training simulator for light inspection-class ROV pilots." />
-  <meta name="twitter:image" content="assets/images/hero-scene.png" />
+  <meta name="twitter:image" content="assets/images/og-cover.jpg" />
 
   <title>Inspect-Me — Deploy. Survey. Surface.</title>
 
@@ -51,6 +53,13 @@
         </feTurbulence>
         <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
       </filter>
+      <!-- the rippling underside of the water surface -->
+      <filter id="surface-ripple" x="-15%" y="-60%" width="130%" height="220%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.011 0.045" numOctaves="2" seed="4" result="n">
+          <animate attributeName="baseFrequency" dur="12s" values="0.011 0.045; 0.018 0.055; 0.011 0.045" repeatCount="indefinite" />
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="24" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
     </defs>
   </svg>
 
@@ -62,6 +71,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="#survey">The survey</a></li>
+        <li><a href="#vessels">Vessels</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#rov-class">ROV class</a></li>
         <li><a href="#faq">FAQ</a></li>
@@ -83,6 +93,7 @@
 
   <div class="mobile-menu" id="mobile-menu" hidden>
     <a href="#survey">The survey</a>
+    <a href="#vessels">Vessels</a>
     <a href="#features">Features</a>
     <a href="#rov-class">ROV class</a>
     <a href="#faq">FAQ</a>
@@ -112,8 +123,16 @@
       </div>
 
       <div class="hero-sea">
+        <div class="hero-deep" aria-hidden="true">
+          <picture>
+            <source srcset="assets/images/hero-vessel.webp" type="image/webp" />
+            <img src="assets/images/hero-vessel.jpg" alt="" width="1280" height="625" fetchpriority="high" decoding="async" />
+          </picture>
+        </div>
+        <div class="light-rays" aria-hidden="true"></div>
         <div class="caustics" aria-hidden="true"></div>
         <p class="hero-reflection" aria-hidden="true">Deploy. Survey.<br />Surface.</p>
+        <div class="water-surface" aria-hidden="true"></div>
 
         <div class="hero-sea-inner">
           <div class="hero-lede-wrap">
@@ -152,11 +171,11 @@
             <p class="stage-tag">DRAG TO ORBIT · THE ROV YOU PILOT</p>
           </div>
 
-          <dl class="depth-ladder" aria-label="Telemetry readout">
+          <dl class="depth-ladder" aria-label="In-sim telemetry readout">
             <div><dt>DEPTH</dt><dd>12.4 m</dd></div>
             <div><dt>HDG</dt><dd>047°</dd></div>
             <div><dt>ALT</dt><dd>3.1 m</dd></div>
-            <div><dt>VEL</dt><dd>0.4 kn</dd></div>
+            <div><dt>SURGE</dt><dd>0.15 m/s</dd></div>
           </dl>
         </div>
       </div>
@@ -173,93 +192,133 @@
             capture quality drive your score — just like a real survey report.</p>
         </header>
 
-        <p class="targets-intro"><span class="mono">SHEET 01</span> — Tap a hotspot to capture a target.
-          <span class="capture-count" id="capture-count">0 / 3 captured</span></p>
+        <p class="targets-intro">
+          <span class="mono">GA SHEET 01 · COASTAL DEFENCE SHIP</span> — Tap a target to photograph it.
+          <span class="capture-count" id="capture-count">0 / 5 sampled</span>
+        </p>
 
-        <div class="targets">
-          <!-- Propeller & rudder -->
-          <figure class="target" data-target="prop">
-            <div class="target-plate">
-              <svg viewBox="0 0 220 170" class="bp" role="img" aria-label="Blueprint: propeller and rudder">
-                <g class="bp-line">
-                  <line x1="20" y1="150" x2="200" y2="150" class="bp-faint" />
-                  <line x1="150" y1="20" x2="150" y2="150" />
-                  <rect x="150" y="55" width="20" height="80" rx="3" />
-                  <line x1="70" y1="85" x2="150" y2="85" />
-                  <circle cx="70" cy="85" r="42" />
-                  <g class="bp-blades">
-                    <path d="M70 85 Q86 40 104 52 Q88 70 70 85Z" />
-                    <path d="M70 85 Q115 101 103 119 Q85 100 70 85Z" />
-                    <path d="M70 85 Q54 130 36 118 Q52 100 70 85Z" />
-                    <path d="M70 85 Q25 69 37 51 Q55 70 70 85Z" />
-                  </g>
-                  <circle cx="70" cy="85" r="8" class="bp-hub" />
-                </g>
-                <text class="bp-tag" x="70" y="146">PROPELLER · Ø0.5 m</text>
-                <text class="bp-tag" x="160" y="44" text-anchor="middle">RUDDER</text>
-              </svg>
-              <button class="hotspot" data-hot="prop" style="left:31.8%;top:50%" aria-label="Capture the propeller — inspection target"></button>
-            </div>
-            <figcaption><span class="t-no">01</span> Propeller &amp; rudder<span class="t-cap" aria-live="polite"></span></figcaption>
-          </figure>
+        <figure class="survey-stage viewport" data-label="FPV · 26 INSPECTION POINTS">
+          <picture>
+            <source srcset="assets/images/survey-hull.webp" type="image/webp" />
+            <img src="assets/images/survey-hull.jpg" alt="A coastal defence ship hull at depth, inspection points marked along the lower hull and waterline" width="1180" height="812" loading="lazy" decoding="async" />
+          </picture>
 
-          <!-- Sea chest & anode -->
-          <figure class="target" data-target="seachest">
-            <div class="target-plate">
-              <svg viewBox="0 0 220 170" class="bp" role="img" aria-label="Blueprint: sea chest and anode">
-                <g class="bp-line">
-                  <path d="M16 44 Q110 24 204 44" class="bp-faint" />
-                  <line x1="16" y1="60" x2="204" y2="60" />
-                  <rect x="62" y="60" width="96" height="60" rx="2" />
-                  <line x1="78" y1="60" x2="78" y2="120" />
-                  <line x1="94" y1="60" x2="94" y2="120" />
-                  <line x1="110" y1="60" x2="110" y2="120" />
-                  <line x1="126" y1="60" x2="126" y2="120" />
-                  <line x1="142" y1="60" x2="142" y2="120" />
-                  <rect x="30" y="92" width="22" height="14" rx="2" class="bp-hub" />
-                </g>
-                <text class="bp-tag" x="110" y="138" text-anchor="middle">SEA CHEST · GRATING</text>
-                <text class="bp-tag" x="41" y="120" text-anchor="middle">ANODE</text>
-              </svg>
-              <button class="hotspot" data-hot="seachest" style="left:18.6%;top:58%" aria-label="Capture the sacrificial anode — inspection target"></button>
-            </div>
-            <figcaption><span class="t-no">02</span> Sea chest &amp; anode<span class="t-cap" aria-live="polite"></span></figcaption>
-          </figure>
+          <button class="hotspot" data-hot="bow" style="left:14%;top:63%" aria-label="Capture target: bow thruster tunnel">
+            <span class="hotspot-tag">Bow thruster tunnel</span>
+          </button>
+          <button class="hotspot" data-hot="anode" style="left:37%;top:73%" aria-label="Capture target: sacrificial anode">
+            <span class="hotspot-tag">Sacrificial anode</span>
+          </button>
+          <button class="hotspot" data-hot="seachest" style="left:55%;top:77%" aria-label="Capture target: sea-chest grating">
+            <span class="hotspot-tag">Sea-chest grating</span>
+          </button>
+          <button class="hotspot" data-hot="bilge" style="left:72%;top:72%" aria-label="Capture target: bilge keel">
+            <span class="hotspot-tag">Bilge keel</span>
+          </button>
+          <button class="hotspot" data-hot="rudder" style="left:87%;top:80%" aria-label="Capture target: rudder and propeller">
+            <span class="hotspot-tag">Rudder &amp; propeller</span>
+          </button>
 
-          <!-- Pile & marine growth -->
-          <figure class="target" data-target="pile">
-            <div class="target-plate">
-              <svg viewBox="0 0 220 170" class="bp" role="img" aria-label="Blueprint: harbour pile with marine growth">
-                <g class="bp-line">
-                  <line x1="20" y1="46" x2="200" y2="46" class="bp-faint" />
-                  <line x1="20" y1="150" x2="200" y2="150" class="bp-faint" />
-                  <rect x="96" y="30" width="28" height="120" rx="6" />
-                  <line x1="110" y1="30" x2="110" y2="150" class="bp-faint" />
-                  <g class="bp-growth">
-                    <circle cx="98" cy="96" r="5" /><circle cx="120" cy="104" r="6" />
-                    <circle cx="100" cy="116" r="4" /><circle cx="122" cy="86" r="4" />
-                    <circle cx="112" cy="124" r="5" /><circle cx="98" cy="80" r="4" />
-                  </g>
-                </g>
-                <text class="bp-tag" x="110" y="166" text-anchor="middle">PILE · MARINE GROWTH</text>
-                <text class="bp-tag" x="150" y="44" text-anchor="middle">WATERLINE</text>
-              </svg>
-              <button class="hotspot" data-hot="pile" style="left:50%;top:61%" aria-label="Capture the marine growth — inspection target"></button>
+          <figcaption class="survey-cap">
+            <span class="mono">CAPTURE</span> — line a component up in frame and shoot. The count is how many
+            inspection points wait on that hull; coverage and capture quality drive your score.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ───────────── VESSELS ───────────── -->
+    <section class="section section-alt" id="vessels">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Choose your target</p>
+          <h2>Three sites. One ROV.</h2>
+          <p class="section-sub">Each mission brings a different vessel alongside. The count is how many
+            General-Arrangement inspection points you'll photograph on that hull — and every site is its own
+            problem in trim, current, and confined space.</p>
+        </header>
+
+        <div class="vessel-grid">
+          <article class="vessel-card">
+            <div class="vessel-media viewport" data-label="TARGET 01">
+              <picture>
+                <source srcset="assets/images/vessel-destroyer.webp" type="image/webp" />
+                <img src="assets/images/vessel-destroyer.jpg" alt="Air-defence destroyer — a large modern surface combatant on dark water" width="900" height="439" loading="lazy" decoding="async" />
+              </picture>
             </div>
-            <figcaption><span class="t-no">03</span> Pile &amp; marine growth<span class="t-cap" aria-live="polite"></span></figcaption>
-          </figure>
+            <div class="vessel-body">
+              <div class="vessel-head">
+                <h3>Air-Defence Destroyer</h3>
+                <p class="vessel-count"><span class="vessel-num">22</span> inspection points</p>
+              </div>
+              <p class="vessel-desc">Large surface combatant · twin screws, deep draught.</p>
+            </div>
+          </article>
+
+          <article class="vessel-card">
+            <div class="vessel-media viewport" data-label="TARGET 02">
+              <picture>
+                <source srcset="assets/images/vessel-coastal.webp" type="image/webp" />
+                <img src="assets/images/vessel-coastal.jpg" alt="Coastal defence ship — a heavy-gun vessel with inspection points along the hull" width="900" height="619" loading="lazy" decoding="async" />
+              </picture>
+            </div>
+            <div class="vessel-body">
+              <div class="vessel-head">
+                <h3>Coastal Defence Ship</h3>
+                <p class="vessel-count"><span class="vessel-num">26</span> inspection points</p>
+              </div>
+              <p class="vessel-desc">Heavy gun vessel · broad beam, shallow draught.</p>
+            </div>
+          </article>
+
+          <article class="vessel-card">
+            <div class="vessel-media viewport" data-label="TARGET 03">
+              <picture>
+                <source srcset="assets/images/vessel-submarine.webp" type="image/webp" />
+                <img src="assets/images/vessel-submarine.jpg" alt="Submarine — a submerged pressure hull on dark water" width="900" height="449" loading="lazy" decoding="async" />
+              </picture>
+            </div>
+            <div class="vessel-body">
+              <div class="vessel-head">
+                <h3>Submarine</h3>
+                <p class="vessel-count"><span class="vessel-num">21</span> inspection points</p>
+              </div>
+              <p class="vessel-desc">Submerged pressure hull · sail planes, shrouded screw.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- ───────────── FEATURES ───────────── -->
-    <section class="section section-alt" id="features">
+    <section class="section" id="features">
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">Built for realism</p>
           <h2>Everything you need to feel the water.</h2>
-          <p class="section-sub">Inspired by professional inspection workflows — not arcade flight.</p>
+          <p class="section-sub">Inspired by professional inspection workflows — not arcade flight. This is one live
+            mission, straight from the build:</p>
         </header>
+
+        <figure class="spotlight viewport" data-label="FPV FEED · LIVE">
+          <picture>
+            <source srcset="assets/images/spotlight-hud.webp" type="image/webp" />
+            <img src="assets/images/spotlight-hud.jpg" alt="An in-mission FPV view inspecting a coastal defence ship hull, overlaid with the live telemetry, component checklist, video-stream panel and dual-stick controls" width="1600" height="890" loading="lazy" decoding="async" />
+          </picture>
+          <span class="pin" style="left:11%;top:16%" aria-hidden="true">1</span>
+          <span class="pin" style="left:50%;top:7%" aria-hidden="true">2</span>
+          <span class="pin" style="left:85%;top:13%" aria-hidden="true">3</span>
+          <span class="pin" style="left:50%;top:88%" aria-hidden="true">4</span>
+          <span class="pin" style="left:89%;top:82%" aria-hidden="true">5</span>
+        </figure>
+        <ol class="spotlight-legend">
+          <li><span class="pin-no">1</span><span><strong>Live telemetry</strong> — depth, heading, altitude and body velocities, read straight off the vehicle.</span></li>
+          <li><span class="pin-no">2</span><span><strong>Component checklist</strong> — every GA target, the captured count, score and dive clock.</span></li>
+          <li><span class="pin-no">3</span><span><strong>MJPEG video stream</strong> — broadcast the FPV feed over HTTP; open it in VLC or a browser.</span></li>
+          <li><span class="pin-no">4</span><span><strong>Capture prompt</strong> — line a component up in frame and photograph it cleanly.</span></li>
+          <li><span class="pin-no">5</span><span><strong>Dual-stick controls</strong> — surge / yaw and heave / sway, fully remappable.</span></li>
+        </ol>
+
         <div class="feature-grid">
           <article class="feature"><span class="feature-no">01</span><h3>4-DOF piloting</h3><p>Dual-stick control: surge and yaw on one axis pair, heave and sway on the other. The vehicle holds attitude, like typical inspection ROV defaults.</p></article>
           <article class="feature"><span class="feature-no">02</span><h3>Marine hydrodynamics</h3><p>Drag, buoyancy, and restoring forces modeled after marine vehicle dynamics — so momentum, drift, and station-keeping feel authentic.</p></article>
@@ -272,7 +331,7 @@
     </section>
 
     <!-- ───────────── ROV CLASS ───────────── -->
-    <section class="section" id="rov-class">
+    <section class="section section-alt" id="rov-class">
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">Light inspection class</p>
@@ -311,33 +370,60 @@
       </div>
     </section>
 
-    <!-- ───────────── PREVIEW ───────────── -->
-    <section class="section section-alt" id="preview">
+    <!-- ───────────── MISSION WALKTHROUGH ───────────── -->
+    <section class="section" id="walkthrough">
       <div class="container">
         <header class="section-head">
-          <p class="eyebrow">Early preview</p>
-          <h2>A first look at what's in the water.</h2>
-          <p class="section-sub">Work-in-progress shots from the current build — visuals and missions are still evolving.</p>
+          <p class="eyebrow">A dive, end to end</p>
+          <h2>Brief. Plan. Descend.</h2>
+          <p class="section-sub">Work-in-progress footage from the current build — the loop you'll run on every mission.</p>
         </header>
-        <div class="preview-gallery">
-          <figure class="preview-frame">
-            <img src="assets/images/menu-preview.png" alt="Inspect-Me main menu with Start Mission and Controls &amp; Bindings" loading="lazy" />
-            <figcaption>Main menu · keyboard, mouse &amp; joystick</figcaption>
-          </figure>
-          <figure class="preview-frame">
-            <img src="assets/images/hero-scene.png" alt="An inspection target — a submarine hull at the waterline" loading="lazy" />
-            <figcaption>Inspection target · vessel hull survey</figcaption>
-          </figure>
-          <figure class="preview-frame">
-            <img src="assets/images/dev-scene.png" alt="Development scene showing a full vessel hull on the survey grid" loading="lazy" />
-            <figcaption>Environment blockout · work in progress</figcaption>
-          </figure>
-        </div>
+        <ol class="walk-steps">
+          <li class="walk-step">
+            <div class="walk-media viewport" data-label="STEP 01 · BRIEF">
+              <picture>
+                <source srcset="assets/images/step-select.webp" type="image/webp" />
+                <img src="assets/images/step-select.jpg" alt="The Select Target Vessel screen, choosing between destroyer, coastal defence ship and submarine" width="1100" height="617" loading="lazy" decoding="async" />
+              </picture>
+            </div>
+            <div class="walk-text">
+              <span class="walk-no">01</span>
+              <h3>Pick the target</h3>
+              <p>Choose a vessel and read its brief — hull type, draught, and how many inspection points it carries.</p>
+            </div>
+          </li>
+          <li class="walk-step">
+            <div class="walk-media viewport" data-label="STEP 02 · PLAN">
+              <picture>
+                <source srcset="assets/images/step-launch.webp" type="image/webp" />
+                <img src="assets/images/step-launch.jpg" alt="A top-down launch-point planner offering port, starboard and stern entry around the hull" width="760" height="1097" loading="lazy" decoding="async" />
+              </picture>
+            </div>
+            <div class="walk-text">
+              <span class="walk-no">02</span>
+              <h3>Plan your approach</h3>
+              <p>Drop in from port, starboard, or stern — pick the launch point that gives you the cleanest run at the hull.</p>
+            </div>
+          </li>
+          <li class="walk-step">
+            <div class="walk-media viewport" data-label="STEP 03 · DESCEND">
+              <picture>
+                <source srcset="assets/images/step-dive.webp" type="image/webp" />
+                <img src="assets/images/step-dive.jpg" alt="An ROV inspecting a submarine hull at depth, with live telemetry and the wireframe survey grid" width="1200" height="671" loading="lazy" decoding="async" />
+              </picture>
+            </div>
+            <div class="walk-text">
+              <span class="walk-no">03</span>
+              <h3>Dive and inspect</h3>
+              <p>Fly the hull on the sticks, line up each component, and photograph it. Surface with the survey done.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </section>
 
     <!-- ───────────── FOLLOW ───────────── -->
-    <section class="section" id="follow">
+    <section class="section section-alt" id="follow">
       <div class="container">
         <div class="follow">
           <div>
@@ -355,7 +441,7 @@
     </section>
 
     <!-- ───────────── FAQ ───────────── -->
-    <section class="section section-alt" id="faq">
+    <section class="section" id="faq">
       <div class="container narrow">
         <header class="section-head">
           <p class="eyebrow">FAQ</p>
