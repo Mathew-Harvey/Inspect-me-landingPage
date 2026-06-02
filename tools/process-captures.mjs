@@ -67,40 +67,58 @@ async function run() {
 }
 
 /**
- * The hero's floating vessel. image5 is an above-water beauty shot on a dark
- * render background, shot at a 3/4 angle — so the ship's waterline runs
- * diagonally. To float it on a flat page waterline we:
- *   1. luminance-key the bright ship out of the dark sky, AND
- *   2. KEEP a feathered band of the ship's own (dark) water from the waterline
- *      down, so the hull sits IN water that blends into our dark sea.
- * That second part is what stops the low stern from reading as "sinking" and
- * the high bow from punching a sky-notch through the surface. The kept water is
- * faded out toward the sides and bottom so it melts into the page's sea.
+ * The hero's floating vessel. image5 is an above-water 3/4 render on a dark
+ * background. To float it on the page's flat waterline with a bit of dynamic
+ * stern-up pitch, we:
+ *   1. luminance-key the bright ship off its dark background,
+ *   2. pitch it stern-up, then
+ *   3. lay a FLAT band of render-coloured water under the hull so it sits on a
+ *      level sea — a band tilted WITH the ship would lift a dark wedge above
+ *      the waterline at the raised stern. The water is feathered at its top,
+ *      sides and bottom so it melts into the page's dark sea in both themes.
  */
 async function makeHeroShip() {
   const smooth = (e0, e1, x) => { const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); };
+  const PITCH = 8.5;       // degrees of stern-up pitch
+  const WATER_TOP = 0.56;  // the flat sea surface, as a fraction of the pitched canvas
+  const [WR, WG, WB] = [20, 42, 58];
+
   const { data, info } = await sharp(join(SRC, "image5.png")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h, channels: c } = info;
-  const out = Buffer.from(data);
-  for (let y = 0; y < h; y++) {
-    const yn = y / h;
-    const band = smooth(0.50, 0.64, yn);          // start keeping water at the waterline
-    const bottomFade = smooth(0.0, 0.34, 1 - yn);  // …and fade it out toward the bottom
-    for (let x = 0; x < w; x++) {
-      const o = (y * w + x) * c;
-      const lum = 0.299 * data[o] + 0.587 * data[o + 1] + 0.114 * data[o + 2];
-      const key = smooth(46, 80, lum);             // the bright ship
-      const xn = x / w;
-      const sideFade = smooth(0.0, 0.1, xn) * smooth(0.0, 0.1, 1 - xn);
-      const water = band * bottomFade * sideFade;  // its own water, feathered to blend
-      out[o + 3] = Math.round(Math.min(1, Math.max(key, water)) * 255);
+
+  // 1. key the bright ship out of the dark background
+  const ship = Buffer.from(data);
+  for (let i = 0; i < w * h; i++) {
+    const o = i * c;
+    const lum = 0.299 * data[o] + 0.587 * data[o + 1] + 0.114 * data[o + 2];
+    ship[o + 3] = Math.round(smooth(44, 82, lum) * 255);
+  }
+
+  // 2. pitch the ship stern-up (transparent corners)
+  const tilt = await sharp(ship, { raw: { width: w, height: h, channels: c } })
+    .rotate(-PITCH, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .toBuffer({ resolveWithObject: true });
+  const { width: tw, height: th } = tilt.info;
+  const td = tilt.data;
+
+  // 3. lay a flat, feathered band of water under the hull
+  const out = Buffer.from(td);
+  for (let y = 0; y < th; y++) {
+    const yn = y / th;
+    const vBand = smooth(WATER_TOP - 0.015, WATER_TOP + 0.05, yn) * smooth(0.0, 0.28, 1 - yn);
+    for (let x = 0; x < tw; x++) {
+      const o = (y * tw + x) * c;
+      const xn = x / tw;
+      const water = vBand * smooth(0.0, 0.07, xn) * smooth(0.0, 0.07, 1 - xn);
+      if (td[o + 3] / 255 < water) { out[o] = WR; out[o + 1] = WG; out[o + 2] = WB; out[o + 3] = Math.round(water * 255); }
     }
   }
-  const cut = sharp(out, { raw: { width: w, height: h, channels: c } });
+
+  const cut = sharp(out, { raw: { width: tw, height: th, channels: c } });
   await cut.clone().webp({ quality: 86, effort: 6, alphaQuality: 90 }).toFile(join(OUT, "hero-ship.webp"));
   await cut.clone().png({ compressionLevel: 9, palette: true }).toFile(join(OUT, "hero-ship.png"));
   const [wf, pf] = await Promise.all([stat(join(OUT, "hero-ship.webp")), stat(join(OUT, "hero-ship.png"))]);
-  console.log(`${"hero-ship".padEnd(18)} webp ${kb(wf.size).padStart(8)}   png ${kb(pf.size).padStart(8)}  (floating, alpha)`);
+  console.log(`${"hero-ship".padEnd(18)} webp ${kb(wf.size).padStart(8)}   png ${kb(pf.size).padStart(8)}  (${tw}x${th}, pitched ${PITCH}°)`);
 }
 
 run().catch((e) => {
