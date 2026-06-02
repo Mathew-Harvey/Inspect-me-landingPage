@@ -173,6 +173,17 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .dive-handle-grip::after { top: 4px; }
 .dive-handle-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--on-water); white-space: nowrap; }
 
+/* a vessel floating on the waterline — topsides in the air, hull in the water */
+.hero-float {
+  position: absolute; z-index: 2; pointer-events: none;
+  top: calc(var(--header-h) + var(--sky-h));
+  right: max(12px, calc((100% - var(--maxw)) / 2 - 8px));
+  width: min(520px, 50%);
+  transform: translateY(-59%);
+  filter: drop-shadow(0 14px 24px rgba(2, 12, 18, 0.5));
+}
+.hero-float img { width: 100%; height: auto; display: block; }
+
 .hero-sea {
   position: relative; overflow: hidden;
   background-color: var(--bg-bottom);
@@ -427,6 +438,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   .follow { grid-template-columns: 1fr; gap: 1.8rem; padding: 2.2rem; }
   .walk-step { grid-template-columns: 1fr; gap: 1.3rem; }
   .walk-step .walk-media { order: -1 !important; }
+  /* the stacked layout puts the ROV at the waterline — drop the floating ship to avoid overlap */
+  .hero-float { display: none; }
 }
 @media (max-width: 600px) {
   .nav-links, .theme-btn-label { display: none; }

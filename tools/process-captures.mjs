@@ -20,9 +20,6 @@ const OUT = resolve(__dirname, "../assets/images");
 
 // out name ← source, target width (height optional → cover-crop)
 const JOBS = [
-  // Cinematic hero backdrop (looms in the deep, darkened behind content)
-  { src: "image5.png", out: "hero-vessel", width: 1280 },
-
   // Three-vessel showcase cards (clean cinematic renders)
   { src: "image5.png", out: "vessel-destroyer", width: 900 },
   { src: "image6.png", out: "vessel-coastal", width: 900 },
@@ -66,6 +63,32 @@ async function run() {
     console.log(`${job.out.padEnd(18)} webp ${kb(w.size).padStart(8)}   jpg ${kb(j.size).padStart(8)}`);
   }
   console.log(`\nTotal derivatives: ${kb(total)}`);
+  await makeHeroShip();
+}
+
+/**
+ * The hero's floating vessel. image5 is an above-water beauty shot on a dark
+ * render background; a surface vessel has to sit ON the waterline (topsides in
+ * the air, hull in the water), so it needs a transparent background to drop
+ * cleanly onto both the light "sky" and the dark water. We key out the dark
+ * navy backdrop by luminance — the bright ship stays, the dark water/sky goes,
+ * and the lower hull fades right where it meets the waterline.
+ */
+async function makeHeroShip() {
+  const smooth = (e0, e1, x) => { const t = Math.max(0, Math.min(1, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); };
+  const { data, info } = await sharp(join(SRC, "image5.png")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: w, height: h, channels: c } = info;
+  const out = Buffer.from(data);
+  for (let i = 0; i < w * h; i++) {
+    const o = i * c;
+    const lum = 0.299 * data[o] + 0.587 * data[o + 1] + 0.114 * data[o + 2];
+    out[o + 3] = Math.round(smooth(46, 80, lum) * 255);
+  }
+  const cut = sharp(out, { raw: { width: w, height: h, channels: c } });
+  await cut.clone().webp({ quality: 86, effort: 6, alphaQuality: 90 }).toFile(join(OUT, "hero-ship.webp"));
+  await cut.clone().png({ compressionLevel: 9, palette: true }).toFile(join(OUT, "hero-ship.png"));
+  const [wf, pf] = await Promise.all([stat(join(OUT, "hero-ship.webp")), stat(join(OUT, "hero-ship.png"))]);
+  console.log(`${"hero-ship".padEnd(18)} webp ${kb(wf.size).padStart(8)}   png ${kb(pf.size).padStart(8)}  (floating, alpha)`);
 }
 
 run().catch((e) => {
