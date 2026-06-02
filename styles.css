@@ -19,6 +19,7 @@
   --line: rgba(11, 26, 36, 0.10);
   --sky-h: 50vh;          /* hero sky band height (waterline pos)*/
   --maxw: 1140px;
+  --gutter: 48px;         /* page side gutters (tightened on phones) */
   --header-h: 66px;
   --display: "Inter", system-ui, -apple-system, sans-serif;
   --sans: "Inter", system-ui, -apple-system, sans-serif;
@@ -72,8 +73,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 }
 .skip-link:focus { top: 0; }
 
-.container { width: min(var(--maxw), calc(100% - 48px)); margin-inline: auto; }
-.container.narrow { width: min(720px, calc(100% - 48px)); }
+.container { width: min(var(--maxw), calc(100% - var(--gutter))); margin-inline: auto; }
+.container.narrow { width: min(720px, calc(100% - var(--gutter))); }
 
 .mono { font-family: var(--mono); }
 .eyebrow {
@@ -104,7 +105,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   border-bottom-color: var(--line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
-.nav { display: flex; align-items: center; justify-content: space-between; width: min(var(--maxw), calc(100% - 48px)); height: 100%; margin-inline: auto; }
+.nav { display: flex; align-items: center; justify-content: space-between; width: min(var(--maxw), calc(100% - var(--gutter))); height: 100%; margin-inline: auto; }
 .logo { display: flex; align-items: center; gap: 0.6rem; font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--text); }
 .logo-mark { width: 24px; height: 24px; border-radius: 6px; background: var(--bg-bottom); position: relative; flex-shrink: 0; }
 .logo-mark::before { content: ""; position: absolute; left: 3px; right: 3px; top: 50%; height: 1.5px; background: var(--teal); }
@@ -140,7 +141,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   padding: calc(var(--header-h) + 1.5rem) 0 1.4rem;
   transition: background-color 0.6s var(--ease);
 }
-.hero-sky > * { width: min(var(--maxw), calc(100% - 48px)); margin-inline: auto; }
+.hero-sky > * { width: min(var(--maxw), calc(100% - var(--gutter))); margin-inline: auto; }
 
 .titleblock {
   display: flex; gap: 1.2rem; flex-wrap: wrap;
@@ -154,8 +155,9 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 }
 .surface-word { color: var(--teal); }
 
-/* the line */
-.waterline { position: absolute; left: 0; right: 0; top: calc(var(--header-h) + var(--sky-h)); height: 0; z-index: 5; }
+/* the line — sits in flow between sky and sea, so the boundary is always exact
+   (no dependency on --sky-h matching the content height) */
+.waterline { position: relative; height: 0; z-index: 5; }
 .waterline-rule {
   position: absolute; left: 0; right: 0; top: -1px; height: 2px;
   background: linear-gradient(90deg, transparent, var(--teal) 12%, color-mix(in srgb, var(--teal) 60%, #fff) 50%, var(--teal) 88%, transparent);
@@ -249,7 +251,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 @keyframes caustic-drift { from { background-position: 0% 0%; } to { background-position: 30% 20%; } }
 
 .hero-reflection {
-  position: absolute; top: 0.2rem; left: 0; right: 0; width: min(var(--maxw), calc(100% - 48px)); margin-inline: auto;
+  position: absolute; top: 0.2rem; left: 0; right: 0; width: min(var(--maxw), calc(100% - var(--gutter))); margin-inline: auto;
   font-family: var(--display); font-weight: 600; font-size: clamp(2.5rem, 6.6vw, 5.2rem); line-height: 1.02; letter-spacing: -0.035em;
   color: var(--on-water); opacity: 0.18; transform: scaleY(-1);
   filter: url(#refract); pointer-events: none; z-index: 0;
@@ -258,7 +260,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 }
 
 .hero-sea-inner {
-  position: relative; z-index: 1; width: min(var(--maxw), calc(100% - 48px)); margin-inline: auto;
+  position: relative; z-index: 1; width: min(var(--maxw), calc(100% - var(--gutter))); margin-inline: auto;
   display: grid; grid-template-columns: 1fr 1.05fr; gap: 2.5rem; align-items: center; padding-top: 2.5rem;
 }
 .hero-lede { color: var(--on-water); font-size: 1.12rem; font-weight: 300; line-height: 1.66; max-width: 30rem; }
@@ -325,6 +327,10 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 }
 .survey-cap .mono { color: var(--teal); letter-spacing: 0.08em; }
 .survey-cap strong { color: var(--on-water); font-weight: 600; }
+
+/* the image + its hotspots; the caption sits below this box, so hotspots
+   anchor to the hull, never spilling onto the caption text */
+.survey-frame { position: relative; display: block; }
 
 .hotspot {
   position: absolute; z-index: 3; width: 28px; height: 28px; transform: translate(-50%, -50%);
@@ -427,11 +433,16 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* ── Tablet / stacked ── */
 @media (max-width: 900px) {
-  :root { --sky-h: 40vh; }
   .hero-sea-inner { grid-template-columns: 1fr; gap: 1.5rem; }
   .hero-stage { order: -1; }
-  .depth-ladder { position: static; flex-direction: row; flex-wrap: wrap; gap: 1.1rem; border-left: none; border-top: 1px solid color-mix(in srgb, var(--teal) 30%, transparent); padding: 1rem 0 0; margin-top: 1.5rem; }
+  .depth-ladder {
+    position: static; flex-direction: row; flex-wrap: wrap; justify-content: space-between;
+    gap: 0.9rem 1.4rem; border-left: none; padding: 1.1rem 0 0; margin-top: 1.4rem;
+    border-top: 1px solid color-mix(in srgb, var(--teal) 30%, transparent);
+  }
+  .depth-ladder div { flex: 1 0 auto; }
   .feature-grid { grid-template-columns: 1fr 1fr; }
   .vessel-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
   .spotlight-legend { grid-template-columns: 1fr; }
@@ -439,16 +450,46 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   .follow { grid-template-columns: 1fr; gap: 1.8rem; padding: 2.2rem; }
   .walk-step { grid-template-columns: 1fr; gap: 1.3rem; }
   .walk-step .walk-media { order: -1 !important; }
-  /* the stacked layout puts the ROV at the waterline — drop the floating ship to avoid overlap */
+  /* the stacked layout puts the ROV at the waterline — drop the floating ship */
   .hero-float { display: none; }
+  /* content-sized sky: kill the tall empty band above the headline */
+  .hero-sky { min-height: 0; justify-content: flex-start; padding: calc(var(--header-h) + 1rem) 0 2.2rem; }
 }
+
+/* ── Phones ── */
 @media (max-width: 600px) {
+  :root { --gutter: 36px; }
   .nav-links, .theme-btn-label { display: none; }
   .nav-toggle { display: flex; }
+  .section { padding: 4.2rem 0; }
+  .section-head { margin-bottom: 2rem; }
+  .dive-handle { display: none; }
+
+  /* hero */
+  .titleblock { gap: 0.35rem 1rem; margin-bottom: 1rem; padding-bottom: 0.7rem; font-size: 0.66rem; }
+  .hero-sky { padding: calc(var(--header-h) + 0.8rem) 0 1.7rem; }
+  .hero-title { font-size: clamp(2.3rem, 11.5vw, 3.3rem); }
+  .hero-sea { padding: 2.3rem 0 2.9rem; }
+  .hero-sea-inner { padding-top: 1.5rem; }
+  .rov-viewer { height: min(330px, 42vh); }
+  .stage-tag { margin-top: 0.4rem; }
+  .hero-lede { font-size: 1.04rem; }
+  .actions { margin: 1.4rem 0 1.1rem; }
+  .actions .btn-primary { flex: 1 1 auto; }
+  .depth-ladder dd { font-size: 0.86rem; }
+
+  /* survey: bigger tap targets, count drops to its own line */
+  .hotspot { width: 34px; height: 34px; }
+  .targets-intro { font-size: 0.74rem; gap: 0.4rem 0.9rem; }
+  .targets-intro .capture-count { margin-left: 0; }
+
+  /* features: one column; spotlight HUD is too small to annotate — drop the
+     pins and let the numbered legend carry the explanation */
   .feature-grid { grid-template-columns: 1fr; }
   .feature, .feature-grid .feature:not(:nth-child(3n+1)) { padding-left: 0; border-left: none; }
-  .section { padding: 4.2rem 0; }
-  .dive-handle { display: none; }
+  .feature { padding: 1.6rem 0; }
+  .spotlight { margin-bottom: 1.2rem; }
+  .spotlight .pin { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
