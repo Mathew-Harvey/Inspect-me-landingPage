@@ -3,31 +3,33 @@
 Marketing site for the **Inspect-Me** light inspection-class ROV training
 simulator. Static HTML/CSS/JS — no build step.
 
-## Concept — "Waterline"
+## Concept — "Operations console"
 
-One luminous, refracting waterline is the hero, the water effect, the page's
-structural split, *and* the theme switch:
+The page is styled as a deep-sea ROV pilot console — a dark, cyan-lit HUD with
+mono telemetry, corner brackets, target reticles and orange capture annotations,
+taken straight from the concept renders.
 
-- **Light "Surface" (default):** warm paper above the line, ink-dark water below;
-  the giant Fraunces headline *Deploy. Survey. Surface.* sits **on** the line and
-  its reflection refracts in the water (SVG `feTurbulence` + `feDisplacementMap`).
-- **Dark "Dive":** the toggle submerges the page; the mono readout counts
-  `SURFACE 0 m → DIVE 40 m`. Persisted in `localStorage`, seeded from
-  `prefers-color-scheme`.
+- **Dive (dark, default):** the deep-water console look. **Surface (light)** is a
+  "log-sheet on paper" alternate behind the nav toggle; the choice is persisted in
+  `localStorage`.
+- **Cinematic hero:** the finished console render (`assets/Inspectme1.png` →
+  `assets/images/hero-console.*`) is framed as an ROV monitor with a scan-line and
+  drifting god-rays, over an accessible (`sr-only`) headline.
+- **The vehicle:** one `<model-viewer>` WebGL context shows the ROV you pilot,
+  framed in the `.viewport` monitor chrome beside a live-styled **ROV STATUS** panel.
 - **Inspection capture** plays out over a **real captured hull** (the Coastal
-  Defence Ship): amber hotspots sit on the actual inspection points — tap them to
-  run a beat of the photo-survey loop and count toward the hull's 26 targets.
+  Defence Ship): cyan target reticles sit on the actual inspection points — tap them
+  to run a beat of the photo-survey loop and count toward the hull's targets. The
+  special anode target reads orange, like the render's annotation.
 - **In-game captures carry the page.** Raw screen grabs live in
   `assets/capturedFromGame/`; `tools/process-captures.mjs` emits optimized
   WebP + JPEG derivatives into `assets/images/`. Dark game imagery is framed in a
-  shared `.viewport` "ROV monitor" chrome so it reads cleanly in both themes.
+  shared `.viewport` "ROV monitor" chrome with cyan corner brackets.
 - **Three-vessel showcase** (destroyer · coastal defence ship · submarine) and a
   **mission walkthrough** (brief → plan → descend) mirror the game's own flow, and
   an annotated live-HUD spotlight proves the telemetry, checklist, MJPEG stream
   and dual-stick controls.
-- Type: **Inter** (display + body) · **IBM Plex Mono** (telemetry). One
-  `<model-viewer>` WebGL context (the ROV at depth), with a cinematic vessel
-  looming behind it in the deep.
+- Type: **Inter** (display + body) · **IBM Plex Mono** (telemetry).
 
 ## Quick start
 
@@ -50,6 +52,7 @@ Open `http://localhost:8080`.
 | `assets/images/rov-poster.png` | Model loading / no-WebGL fallback |
 | `assets/vendor/model-viewer.min.js` | Vendored — no runtime CDN |
 | `tools/process-captures.mjs` | Rebuilds the optimized imagery from the raw captures (`sharp`) |
+| `tools/process-renders.mjs` | Builds the hero/OG derivatives from the `assets/Inspectme*.png` concept renders (`sharp`) |
 | `tools/` | Procedural ROV + poster generators (`glb-lib.mjs`, `build-models.mjs`, `preview-render.mjs`) |
 
 Regenerate the optimized imagery from the raw captures:

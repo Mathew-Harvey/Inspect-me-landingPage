@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Inspect-Me — a light inspection-class ROV pilot training simulator. Deploy, survey, surface: photo-survey ship hulls and submerged structures with realistic hydrodynamics, FPV control, and a live video stream. In active development." />
-  <meta name="theme-color" content="#F4F1EA" />
+  <meta name="theme-color" content="#05121B" />
   <meta name="color-scheme" content="light dark" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E2A38'/%3E%3Cpath d='M2 18h28' stroke='%230E6E8C' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='12' r='3.4' fill='%23E8A13C'/%3E%3C/svg%3E" />
@@ -26,8 +26,8 @@
   <script>
     (function () {
       try {
-        var t = localStorage.getItem("im-theme");
-        if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        // Dive (dark) is the default brand look; honour a saved preference.
+        var t = localStorage.getItem("im-theme") || "dark";
         document.documentElement.setAttribute("data-theme", t);
       } catch (e) {}
     })();
@@ -43,25 +43,6 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- SVG filters: the waterline refraction -->
-  <svg class="svg-defs" aria-hidden="true" focusable="false">
-    <defs>
-      <filter id="refract" x="-20%" y="-20%" width="140%" height="140%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.014 0.05" numOctaves="2" seed="7" result="noise">
-          <animate attributeName="baseFrequency" dur="14s" values="0.014 0.05; 0.018 0.06; 0.014 0.05" repeatCount="indefinite" />
-        </feTurbulence>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-      <!-- the rippling underside of the water surface -->
-      <filter id="surface-ripple" x="-15%" y="-60%" width="130%" height="220%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.011 0.045" numOctaves="2" seed="4" result="n">
-          <animate attributeName="baseFrequency" dur="12s" values="0.011 0.045; 0.018 0.055; 0.011 0.045" repeatCount="indefinite" />
-        </feTurbulence>
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="24" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-    </defs>
-  </svg>
 
   <header class="site-header" id="top">
     <nav class="nav" aria-label="Primary">
@@ -101,82 +82,82 @@
   </div>
 
   <main id="main">
-    <!-- ───────────── HERO: the waterline ───────────── -->
+    <!-- ───────────── HERO: the operations console ───────────── -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-sky">
-        <p class="titleblock">
-          <span>INSPECT-ME</span>
-          <span class="titleblock-mid">LIGHT INSPECTION-CLASS ROV · TRAINING SIM</span>
-          <span>STATION 04 · 47°12′N</span>
+      <div class="hero-rays" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <p class="hero-status mono">
+          <span><b>FPV</b> // MANUAL</span>
+          <span>LIGHT INSPECTION-CLASS ROV</span>
+          <span class="spacer">STATION 04 · 47°12′N</span>
         </p>
-        <h1 class="hero-title" id="hero-title">
-          Deploy. Survey.<br /><span class="surface-word">Surface.</span>
-        </h1>
-      </div>
 
-      <div class="waterline" aria-hidden="true">
-        <div class="waterline-rule"></div>
-        <button class="dive-handle" id="dive-handle" type="button" aria-hidden="true" tabindex="-1">
-          <span class="dive-handle-grip"></span>
-          <span class="dive-handle-label" id="dive-readout">SURFACE · 0&thinsp;m</span>
-        </button>
-      </div>
+        <h1 class="sr-only" id="hero-title">Inspect-Me — Deploy. Survey. Surface. A light inspection-class ROV pilot training simulator.</h1>
 
-      <div class="hero-float" aria-hidden="true">
-        <picture>
-          <source srcset="assets/images/hero-ship.webp" type="image/webp" />
-          <img src="assets/images/hero-ship.png" alt="" width="985" height="585" decoding="async" />
-        </picture>
-      </div>
+        <figure class="hero-console">
+          <picture>
+            <source srcset="assets/images/hero-console.webp" type="image/webp" />
+            <img src="assets/images/hero-console.jpg"
+              alt="Inspect-Me — a light inspection-class ROV inspecting a submarine hull at depth, with live ROV-status telemetry, mission objectives, target reticles and a sacrificial-anode capture marker overlaid on the feed"
+              width="1920" height="1280" fetchpriority="high" decoding="async" />
+          </picture>
+          <span class="scanline" aria-hidden="true"></span>
+        </figure>
 
-      <div class="hero-sea">
-        <div class="light-rays" aria-hidden="true"></div>
-        <div class="caustics" aria-hidden="true"></div>
-        <p class="hero-reflection" aria-hidden="true">Deploy. Survey.<br />Surface.</p>
-        <div class="water-surface" aria-hidden="true"></div>
-
-        <div class="hero-sea-inner">
-          <div class="hero-lede-wrap">
-            <p class="hero-lede">Pilot a light-inspection ROV. Photo-survey hulls and submerged
-              structures. Find and capture every target — and score the dive.</p>
-            <div class="actions">
-              <a class="btn btn-primary" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">Star on GitHub</a>
-              <a class="btn-text" href="#survey">See the survey <span aria-hidden="true">→</span></a>
-            </div>
-            <p class="hero-foot">In active development · first release free to play · coming 2026</p>
+        <div class="hero-cmd">
+          <p class="hero-lede">Pilot a light-inspection ROV. Photo-survey ship hulls and submerged
+            structures — find every target on the checklist, capture it cleanly, and score the dive.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">Star on GitHub</a>
+            <a class="btn-text" href="#survey">See the survey <span aria-hidden="true">→</span></a>
           </div>
+          <p class="hero-foot">In active development · first release free to play · coming 2026</p>
+        </div>
+      </div>
+    </section>
 
-          <div class="hero-stage">
-            <model-viewer
-              id="rov-viewer"
-              class="rov-viewer"
-              src="assets/models/rov.glb"
-              alt="Interactive 3D model of a light inspection-class ROV"
-              poster="assets/images/rov-poster.png"
-              environment-image="assets/models/env-underwater.png"
-              camera-controls
-              touch-action="pan-y"
-              camera-orbit="-32deg 76deg 105%"
-              interaction-prompt="none"
-              auto-rotate
-              rotation-per-second="16deg"
-              auto-rotate-delay="500"
-              shadow-intensity="0.5"
-              exposure="1.3"
-              tone-mapping="aces"
-              disable-zoom
-              loading="eager"
-              reveal="auto">
-              <img slot="poster" class="rov-fallback" src="assets/images/rov-poster.png" alt="3D model of a light inspection-class ROV" />
-            </model-viewer>
-            <p class="stage-tag">DRAG TO ORBIT · THE ROV YOU PILOT</p>
-          </div>
-
-          <dl class="depth-ladder" aria-label="In-sim telemetry readout">
-            <div><dt>DEPTH</dt><dd>12.4 m</dd></div>
-            <div><dt>HDG</dt><dd>047°</dd></div>
-            <div><dt>ALT</dt><dd>3.1 m</dd></div>
-            <div><dt>SURGE</dt><dd>0.15 m/s</dd></div>
+    <!-- ───────────── THE VEHICLE: interactive ROV console ───────────── -->
+    <section class="section section-alt section-console" id="vehicle">
+      <div class="hud-grid" aria-hidden="true"></div>
+      <div class="container vehicle-wrap">
+        <div class="vehicle-stage viewport" data-label="ROV · DRAG TO ORBIT">
+          <model-viewer
+            id="rov-viewer"
+            class="rov-viewer"
+            src="assets/models/rov.glb"
+            alt="Interactive 3D model of a light inspection-class ROV"
+            poster="assets/images/rov-poster.png"
+            environment-image="assets/models/env-underwater.png"
+            camera-controls
+            touch-action="pan-y"
+            camera-orbit="-32deg 76deg 105%"
+            interaction-prompt="none"
+            auto-rotate
+            rotation-per-second="16deg"
+            auto-rotate-delay="500"
+            shadow-intensity="0.5"
+            exposure="1.3"
+            tone-mapping="aces"
+            disable-zoom
+            loading="eager"
+            reveal="auto">
+            <img slot="poster" class="rov-fallback" src="assets/images/rov-poster.png" alt="3D model of a light inspection-class ROV" />
+          </model-viewer>
+        </div>
+        <div class="vehicle-info">
+          <p class="eyebrow">The vehicle</p>
+          <h2>The ROV you pilot.</h2>
+          <p class="section-sub">A compact, tethered light-inspection vehicle — four to six thrusters,
+            forward lights and an FPV camera. Drag to orbit the hull you'll be flying.</p>
+          <dl class="console-panel console-readout vehicle-readout" aria-label="In-sim ROV status readout">
+            <div class="console-panel-title" style="grid-column:1 / -1">ROV Status</div>
+            <dt>Depth</dt><dd>13.2 m</dd>
+            <dt>Heading</dt><dd>124.3°</dd>
+            <dt>Pitch</dt><dd>-2.1°</dd>
+            <dt>Thrust</dt><dd>67 %</dd>
+            <dt>Battery</dt><dd>78 %</dd>
+            <dt>Tether</dt><dd>56.3 m</dd>
+            <dt>Mode</dt><dd class="alert">MANUAL</dd>
           </dl>
         </div>
       </div>

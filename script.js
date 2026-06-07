@@ -26,54 +26,26 @@
     if (e.key === "Escape" && navToggle?.getAttribute("aria-expanded") === "true") { setMenu(false); navToggle.focus(); }
   });
 
-  // ── Theme: Surface (light) ⇄ Dive (dark) ──
+  // ── Theme: Dive (dark, default) ⇄ Surface (light) ──
   const themeBtn = document.getElementById("theme-btn");
   const themeLabel = document.getElementById("theme-btn-label");
-  const diveBtn = document.getElementById("dive-handle");
-  const readout = document.getElementById("dive-readout");
   const themeColor = document.querySelector('meta[name="theme-color"]');
-  let depthTween;
 
-  const setReadout = (dark, instant) => {
-    if (!readout) return;
-    const target = dark ? 40 : 0;
-    const word = dark ? "DIVE" : "SURFACE";
-    cancelAnimationFrame(depthTween);
-    if (instant || reduceMotion) { readout.innerHTML = `${word} · ${target}&thinsp;m`; return; }
-    const from = dark ? 0 : 40, dur = 650, t0 = performance.now();
-    const step = (t) => {
-      const k = Math.min(1, (t - t0) / dur);
-      const v = Math.round(from + (target - from) * k);
-      readout.innerHTML = `${word} · ${v}&thinsp;m`;
-      if (k < 1) depthTween = requestAnimationFrame(step);
-    };
-    depthTween = requestAnimationFrame(step);
-  };
-
-  const syncUI = (dark, instant) => {
+  const syncUI = (dark) => {
     themeBtn?.setAttribute("aria-checked", String(dark));
     if (themeLabel) themeLabel.textContent = dark ? "Dive" : "Surface";
-    themeColor?.setAttribute("content", dark ? "#06141C" : "#F4F1EA");
-    setReadout(dark, instant);
+    themeColor?.setAttribute("content", dark ? "#05121B" : "#F4F1EA");
   };
 
   const applyTheme = (theme) => {
     root.setAttribute("data-theme", theme);
     try { localStorage.setItem("im-theme", theme); } catch (e) {}
-    syncUI(theme === "dark", false);
+    syncUI(theme === "dark");
   };
   const toggleTheme = () => applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
 
   themeBtn?.addEventListener("click", toggleTheme);
-  diveBtn?.addEventListener("click", toggleTheme);
-  syncUI(root.getAttribute("data-theme") === "dark", true); // initial, no animation
-
-  // follow OS preference if the user hasn't chosen
-  try {
-    if (!localStorage.getItem("im-theme")) {
-      window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", (e) => applyTheme(e.matches ? "dark" : "light"));
-    }
-  } catch (e) {}
+  syncUI(root.getAttribute("data-theme") === "dark");
 
   // ── Inspection capture: one beat of the real survey loop ──
   const hotspots = Array.from(document.querySelectorAll(".hotspot"));
@@ -94,9 +66,8 @@
     });
   });
 
-  // ── Reduced motion: still the model + freeze the refraction shimmer ──
+  // ── Reduced motion: still the model ──
   if (reduceMotion) {
     document.getElementById("rov-viewer")?.removeAttribute("auto-rotate");
-    document.querySelector("svg.svg-defs")?.pauseAnimations?.();
   }
 })();
