@@ -70,4 +70,51 @@
   if (reduceMotion) {
     document.getElementById("rov-viewer")?.removeAttribute("auto-rotate");
   }
+
+  // ── The descent: depth gauge + scroll-driven darkening ──────────────
+  root.classList.add("js");
+
+  const rovMark = document.getElementById("dg-rov");
+  const depthEl = document.getElementById("dg-depth");
+  const MAX_DEPTH = 60; // metres "reached" at the seabed (bottom of the page)
+
+  let depthTick = false;
+  const updateDepth = () => {
+    depthTick = false;
+    const max = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+    const p = Math.min(1, Math.max(0, window.scrollY / max));
+    root.style.setProperty("--depth", p.toFixed(4));
+    if (depthEl) depthEl.textContent = Math.round(p * MAX_DEPTH);
+    if (rovMark) rovMark.style.top = (p * 100).toFixed(2) + "%";
+  };
+  const onDepthScroll = () => {
+    if (!depthTick) { depthTick = true; requestAnimationFrame(updateDepth); }
+  };
+  window.addEventListener("scroll", onDepthScroll, { passive: true });
+  window.addEventListener("resize", onDepthScroll, { passive: true });
+  updateDepth();
+
+  // ── Reveal content as it rises out of the dark ──────────────────────
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    const targets = document.querySelectorAll(
+      ".hero-cmd, .section-head, .real-photo, .vehicle-info, .vehicle-stage, .survey-stage," +
+      " .targets-intro, .harbour-banner, .vessel-card, .manifest-card, .spotlight, .spotlight-legend li," +
+      " .feature, .spec-card, .walk-step, .paper-card, .follow, .faq-list details, .il-inner"
+    );
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+    );
+    targets.forEach((t) => {
+      t.classList.add("reveal");
+      // gentle cascade for items within a shared parent (grids, lists)
+      const idx = t.parentElement ? Array.prototype.indexOf.call(t.parentElement.children, t) : 0;
+      t.style.transitionDelay = Math.min(idx, 6) * 60 + "ms";
+      io.observe(t);
+    });
+  }
 })();

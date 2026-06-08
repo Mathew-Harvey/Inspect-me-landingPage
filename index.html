@@ -44,6 +44,30 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- The water column: a fixed dive backdrop that darkens as you descend -->
+  <div class="depth-backdrop" id="depth-backdrop" aria-hidden="true">
+    <div class="db-rays"></div>
+    <div class="db-snow"></div>
+    <div class="db-abyss"></div>
+  </div>
+
+  <!-- Depth gauge: the ROV descends the track as the page scrolls -->
+  <aside class="dive-gauge" id="dive-gauge" aria-hidden="true">
+    <span class="dg-cap">Surface</span>
+    <div class="dg-track">
+      <span class="dg-rov" id="dg-rov">
+        <svg viewBox="0 0 26 18" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="2" width="20" height="6" rx="3" fill="#F0C53C"/>
+          <rect x="2.5" y="8" width="21" height="7" rx="2" fill="#0B1F2B" stroke="#4FD0E6" stroke-width="1"/>
+          <circle cx="8" cy="11.5" r="2.1" fill="#06141c"/>
+          <circle cx="18" cy="11.5" r="2.1" fill="#06141c"/>
+        </svg>
+      </span>
+    </div>
+    <span class="dg-cap">Seabed</span>
+    <div class="dg-read"><b id="dg-depth">0</b>metres</div>
+  </aside>
+
   <header class="site-header" id="top">
     <nav class="nav" aria-label="Primary">
       <a class="logo" href="#top" aria-label="Inspect-Me home">
@@ -55,6 +79,7 @@
         <li><a href="#vessels">Vessels</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#rov-class">ROV class</a></li>
+        <li><a href="#paper">Paper</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <div class="nav-end">
@@ -77,6 +102,7 @@
     <a href="#vessels">Vessels</a>
     <a href="#features">Features</a>
     <a href="#rov-class">ROV class</a>
+    <a href="#paper">Paper</a>
     <a href="#faq">FAQ</a>
     <a href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
   </div>
@@ -89,20 +115,21 @@
         <p class="hero-status mono">
           <span><b>FPV</b> // MANUAL</span>
           <span>LIGHT INSPECTION-CLASS ROV</span>
-          <span class="spacer">STATION 04 · 47°12′N</span>
+          <span class="spacer">BUILT IN UNITY · URP</span>
         </p>
 
         <h1 class="sr-only" id="hero-title">Inspect-Me — Deploy. Survey. Surface. A light inspection-class ROV pilot training simulator.</h1>
 
         <figure class="hero-console">
           <picture>
-            <source srcset="assets/images/hero-console.webp" type="image/webp" />
-            <img src="assets/images/hero-console.jpg"
-              alt="Inspect-Me — a light inspection-class ROV inspecting a submarine hull at depth, with live ROV-status telemetry, mission objectives, target reticles and a sacrificial-anode capture marker overlaid on the feed"
-              width="1920" height="1280" fetchpriority="high" decoding="async" />
+            <source srcset="assets/images/hero-title.webp" type="image/webp" />
+            <img src="assets/images/hero-title.jpg"
+              alt="The Inspect-Me title screen: the yellow light inspection-class ROV suspended over a harbour, with the Deploy · Survey · Surface tagline and the mission menu"
+              width="1614" height="905" fetchpriority="high" decoding="async" />
           </picture>
           <span class="scanline" aria-hidden="true"></span>
         </figure>
+        <p class="hero-shotnote mono">Actual in-engine title screen · work-in-progress build</p>
 
         <div class="hero-cmd">
           <p class="hero-lede">Pilot a light-inspection ROV. Photo-survey ship hulls and submerged
@@ -116,6 +143,35 @@
       </div>
     </section>
 
+    <!-- ───────────── REFERENCE VEHICLE: real photographs ───────────── -->
+    <section class="section" id="real-rov">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">The vehicle, topside</p>
+          <h2>On the quay, then over the side.</h2>
+          <p class="section-sub">A compact light inspection-class ROV and its surface tether reel, staged on the
+            wharf before a dive. Inspect-Me models this vehicle class: four-degree-of-freedom handling,
+            finite-reel umbilical management, and the hull-survey workflow it's built for.</p>
+        </header>
+        <div class="real-rov-grid">
+          <figure class="real-photo">
+            <picture>
+              <source srcset="assets/images/field-deck.webp" type="image/webp" />
+              <img src="assets/images/field-deck.jpg" alt="A light inspection-class ROV on a quayside with its tether reel, cranes and a ship in the background" width="1168" height="806" loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>Open-frame ROV on the quay — vectored thrusters, twin pressure housings, camera and lights.</figcaption>
+          </figure>
+          <figure class="real-photo">
+            <picture>
+              <source srcset="assets/images/field-reel.webp" type="image/webp" />
+              <img src="assets/images/field-reel.jpg" alt="The ROV staged at the waterline with its yellow umbilical wound onto a surface tether reel" width="1168" height="806" loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>The surface tether reel and umbilical — finite-reel management the sim makes you practise.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <!-- ───────────── THE VEHICLE: interactive ROV console ───────────── -->
     <section class="section section-alt section-console" id="vehicle">
       <div class="hud-grid" aria-hidden="true"></div>
@@ -124,10 +180,9 @@
           <model-viewer
             id="rov-viewer"
             class="rov-viewer"
-            src="assets/models/rov.glb"
-            alt="Interactive 3D model of a light inspection-class ROV"
+            src="assets/models/menu-rov.glb"
+            alt="Interactive 3D model of the yellow light inspection-class ROV from the game's title screen"
             poster="assets/images/rov-poster.png"
-            environment-image="assets/models/env-underwater.png"
             camera-controls
             touch-action="pan-y"
             camera-orbit="-32deg 76deg 105%"
@@ -135,13 +190,14 @@
             auto-rotate
             rotation-per-second="16deg"
             auto-rotate-delay="500"
-            shadow-intensity="0.5"
-            exposure="1.3"
-            tone-mapping="aces"
+            shadow-intensity="0.65"
+            shadow-softness="0.9"
+            exposure="1.05"
+            tone-mapping="neutral"
             disable-zoom
             loading="eager"
             reveal="auto">
-            <img slot="poster" class="rov-fallback" src="assets/images/rov-poster.png" alt="3D model of a light inspection-class ROV" />
+            <img slot="poster" class="rov-fallback" src="assets/images/rov-poster.png" alt="The yellow light inspection-class ROV you pilot" />
           </model-viewer>
         </div>
         <div class="vehicle-info">
@@ -160,6 +216,19 @@
             <dt>Mode</dt><dd class="alert">MANUAL</dd>
           </dl>
         </div>
+      </div>
+    </section>
+
+    <!-- ───────────── DEPTH INTERLUDE · descent ───────────── -->
+    <section class="interlude" aria-label="Descending">
+      <picture>
+        <source srcset="assets/images/dive-clear.webp" type="image/webp" />
+        <img src="assets/images/dive-clear.jpg" alt="The ROV descending through sunlit, clear water toward a hull" width="1168" height="806" loading="lazy" decoding="async" />
+      </picture>
+      <div class="il-inner">
+        <p class="il-tag">Over the side</p>
+        <p class="il-depth">12<span>m</span></p>
+        <p class="il-line">Sunlight still reaches the work. Trim out, mind the tether, and start the survey.</p>
       </div>
     </section>
 
@@ -186,8 +255,8 @@
               <img src="assets/images/survey-hull.jpg" alt="A coastal defence ship hull at depth, inspection points marked along the lower hull and waterline" width="1180" height="812" loading="lazy" decoding="async" />
             </picture>
 
-            <button class="hotspot" data-hot="bow" style="left:14%;top:63%" aria-label="Capture target: bow thruster tunnel">
-              <span class="hotspot-tag">Bow thruster tunnel</span>
+            <button class="hotspot" data-hot="rudder" style="left:14%;top:63%" aria-label="Capture target: rudder and propeller">
+              <span class="hotspot-tag">Rudder &amp; propeller</span>
             </button>
             <button class="hotspot" data-hot="anode" style="left:37%;top:73%" aria-label="Capture target: sacrificial anode">
               <span class="hotspot-tag">Sacrificial anode</span>
@@ -198,8 +267,8 @@
             <button class="hotspot" data-hot="bilge" style="left:72%;top:72%" aria-label="Capture target: bilge keel">
               <span class="hotspot-tag">Bilge keel</span>
             </button>
-            <button class="hotspot" data-hot="rudder" style="left:87%;top:80%" aria-label="Capture target: rudder and propeller">
-              <span class="hotspot-tag">Rudder &amp; propeller</span>
+            <button class="hotspot" data-hot="bow" style="left:87%;top:80%" aria-label="Capture target: bow thruster tunnel">
+              <span class="hotspot-tag">Bow thruster tunnel</span>
             </button>
           </div>
 
@@ -216,61 +285,72 @@
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">Choose your target</p>
-          <h2>Three sites. One ROV.</h2>
-          <p class="section-sub">Each mission brings a different vessel alongside. The count is how many
-            General-Arrangement inspection points you'll photograph on that hull — and every site is its own
-            problem in trim, current, and confined space.</p>
+          <h2>Eight hulls. One ROV.</h2>
+          <p class="section-sub">Eight vessels lie alongside in the harbour — from a 27-point ocean liner to a
+            13-point sail yacht. The number on each is how many General-Arrangement inspection points you'll
+            photograph on that hull, and every hull is its own problem in trim, current, and confined space.</p>
         </header>
 
-        <div class="vessel-grid">
-          <article class="vessel-card">
-            <div class="vessel-media viewport" data-label="TARGET 01">
+        <div class="harbour-banner">
+          <div class="harbour-pair">
+            <figure class="viewport" data-label="ROSTER · 1–4">
               <picture>
-                <source srcset="assets/images/vessel-destroyer.webp" type="image/webp" />
-                <img src="assets/images/vessel-destroyer.jpg" alt="Air-defence destroyer — a large modern surface combatant on dark water" width="900" height="439" loading="lazy" decoding="async" />
+                <source srcset="assets/images/harbour-select.webp" type="image/webp" />
+                <img src="assets/images/harbour-select.jpg" alt="The Inspect-Me harbour with a liner, a tug and a submarine alongside, and the Select Target Vessel panel showing the destroyer, coastal defence ship, submarine and ocean liner" width="1605" height="897" loading="lazy" decoding="async" />
               </picture>
-            </div>
-            <div class="vessel-body">
-              <div class="vessel-head">
-                <h3>Air-Defence Destroyer</h3>
-                <p class="vessel-count"><span class="vessel-num">22</span> inspection points</p>
-              </div>
-              <p class="vessel-desc">Large surface combatant · twin screws, deep draught.</p>
-            </div>
-          </article>
-
-          <article class="vessel-card">
-            <div class="vessel-media viewport" data-label="TARGET 02">
+            </figure>
+            <figure class="viewport" data-label="ROSTER · 5–8">
               <picture>
-                <source srcset="assets/images/vessel-coastal.webp" type="image/webp" />
-                <img src="assets/images/vessel-coastal.jpg" alt="Coastal defence ship — a heavy-gun vessel with inspection points along the hull" width="900" height="619" loading="lazy" decoding="async" />
+                <source srcset="assets/images/harbour-roster.webp" type="image/webp" />
+                <img src="assets/images/harbour-roster.jpg" alt="The vessel-select roster showing the harbour tug, patrol boat, wooden boat and sail yacht, with a sail yacht moored in the harbour" width="1605" height="908" loading="lazy" decoding="async" />
               </picture>
-            </div>
-            <div class="vessel-body">
-              <div class="vessel-head">
-                <h3>Coastal Defence Ship</h3>
-                <p class="vessel-count"><span class="vessel-num">26</span> inspection points</p>
-              </div>
-              <p class="vessel-desc">Heavy gun vessel · broad beam, shallow draught.</p>
-            </div>
-          </article>
-
-          <article class="vessel-card">
-            <div class="vessel-media viewport" data-label="TARGET 03">
-              <picture>
-                <source srcset="assets/images/vessel-submarine.webp" type="image/webp" />
-                <img src="assets/images/vessel-submarine.jpg" alt="Submarine — a submerged pressure hull on dark water" width="900" height="449" loading="lazy" decoding="async" />
-              </picture>
-            </div>
-            <div class="vessel-body">
-              <div class="vessel-head">
-                <h3>Submarine</h3>
-                <p class="vessel-count"><span class="vessel-num">21</span> inspection points</p>
-              </div>
-              <p class="vessel-desc">Submerged pressure hull · sail planes, shrouded screw.</p>
-            </div>
-          </article>
+            </figure>
+          </div>
+          <p class="harbour-cap"><span class="mono">SELECT TARGET VESSEL</span> — bring any of the eight hulls alongside in the live harbour, then drop in.</p>
         </div>
+
+        <ol class="vessel-manifest" aria-label="Inspectable vessels and their inspection-point counts">
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">01</span><span class="mc-pts"><b>24</b> pts</span></div>
+            <h3>Air-Defence Destroyer</h3>
+            <p>Large surface combatant — twin screws, deep draught.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">02</span><span class="mc-pts"><b>26</b> pts</span></div>
+            <h3>Coastal Defence Ship</h3>
+            <p>Heavy gun vessel — broad beam, shallow draught.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">03</span><span class="mc-pts"><b>24</b> pts</span></div>
+            <h3>Submarine</h3>
+            <p>Submerged pressure hull — sail, planes, shrouded screw.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">04</span><span class="mc-pts"><b>27</b> pts</span></div>
+            <h3>Ocean Liner</h3>
+            <p>Large passenger hull — bulbous bow, twin screws, deep draught.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">05</span><span class="mc-pts"><b>18</b> pts</span></div>
+            <h3>Harbour Tug</h3>
+            <p>Stout workboat — deep skeg, single screw in a kort nozzle.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">06</span><span class="mc-pts"><b>21</b> pts</span></div>
+            <h3>Patrol Boat</h3>
+            <p>Fast craft — planing hull, twin screws, shallow draught.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">07</span><span class="mc-pts"><b>17</b> pts</span></div>
+            <h3>Wooden Boat</h3>
+            <p>Timber hull — single screw, exposed shaft &amp; rudder.</p>
+          </li>
+          <li class="manifest-card">
+            <div class="mc-top"><span class="mc-no">08</span><span class="mc-pts"><b>13</b> pts</span></div>
+            <h3>Sail Yacht</h3>
+            <p>Fin-keel sailing hull — deep keel, single spade rudder.</p>
+          </li>
+        </ol>
       </div>
     </section>
 
@@ -286,8 +366,8 @@
 
         <figure class="spotlight viewport" data-label="FPV FEED · LIVE">
           <picture>
-            <source srcset="assets/images/spotlight-hud.webp" type="image/webp" />
-            <img src="assets/images/spotlight-hud.jpg" alt="An in-mission FPV view inspecting a coastal defence ship hull, overlaid with the live telemetry, component checklist, video-stream panel and dual-stick controls" width="1600" height="890" loading="lazy" decoding="async" />
+            <source srcset="assets/images/mission-hud.webp" type="image/webp" />
+            <img src="assets/images/mission-hud.jpg" alt="An in-mission FPV view inspecting a coastal defence ship hull, overlaid with the live telemetry, component checklist, video-stream panel, sonar toggle and dual-stick controls" width="1603" height="894" loading="lazy" decoding="async" />
           </picture>
           <span class="pin" style="left:11%;top:16%" aria-hidden="true">1</span>
           <span class="pin" style="left:50%;top:7%" aria-hidden="true">2</span>
@@ -406,6 +486,49 @@
       </div>
     </section>
 
+    <!-- ───────────── DEPTH INTERLUDE · working depth ───────────── -->
+    <section class="interlude" aria-label="At working depth">
+      <picture>
+        <source srcset="assets/images/dive-deep.webp" type="image/webp" />
+        <img src="assets/images/dive-deep.jpg" alt="The ROV at working depth in dark water, lit only by its own spotlights" width="1168" height="806" loading="lazy" decoding="async" />
+      </picture>
+      <div class="il-inner">
+        <p class="il-tag">Working depth</p>
+        <p class="il-depth">40<span>m</span></p>
+        <p class="il-line">Lights on, marine snow drifting. Just the pilot, the hull, and the engineering behind it.</p>
+      </div>
+    </section>
+
+    <!-- ───────────── TECHNICAL PAPER ───────────── -->
+    <section class="section" id="paper">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">The engineering</p>
+          <h2>Read the paper behind it.</h2>
+          <p class="section-sub">Inspect-Me is documented as a technical paper: the 6-DOF marine
+            dynamics, the 4-DOF pilot model, the in-engine architecture, the procedural biofouling and
+            the simulated finite-reel umbilical — written up in full, with the maths.</p>
+        </header>
+        <div class="paper-card">
+          <a class="paper-cover" href="downloads/Inspect-Me-Simulator-Paper.pdf" aria-label="Download the Inspect-Me technical paper (PDF)">
+            <img src="assets/images/paper-cover.jpg" alt="First page of the Inspect-Me technical paper" width="900" height="1170" loading="lazy" decoding="async" />
+          </a>
+          <div class="paper-body">
+            <h3>A Self-Contained Unity Simulator for Light Inspection-Class ROV Pilot Training</h3>
+            <p class="paper-meta mono">Preprint · single-process Unity (URP) architecture · 4 figures · full derivations</p>
+            <p class="paper-abs">A high-fidelity training simulator for the light inspection-class ROV
+              category, built entirely inside Unity with no external ROS/Gazebo middleware: rigid-body
+              marine dynamics, a physically simulated umbilical, photorealistic underwater rendering and a
+              scored photo-survey task, all in a single engine process on commodity hardware.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="downloads/Inspect-Me-Simulator-Paper.pdf" download>Download PDF</a>
+              <a class="btn-text" href="paper.html">Read online <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ───────────── FOLLOW ───────────── -->
     <section class="section section-alt" id="follow">
       <div class="container">
@@ -469,6 +592,7 @@
       </a>
       <nav class="footer-links" aria-label="Footer">
         <a href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="paper.html">Paper</a>
         <a href="mailto:mathewharvey@gmail.com">Contact</a>
         <a href="#faq">FAQ</a>
       </nav>

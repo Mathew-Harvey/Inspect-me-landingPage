@@ -1,3 +1,5 @@
 node_modules/
 tools/*-preview.png
+tools/.menurov-raw.glb
+tmp-*
 .DS_Store

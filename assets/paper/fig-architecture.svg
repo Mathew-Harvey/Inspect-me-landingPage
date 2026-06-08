@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="470" viewBox="0 0 920 470" font-family="Inter, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#0A4E64"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#B96A12"/>
+    </marker>
+  </defs>
+
+  <style>
+    .ax-box{fill:#fff;stroke:#9fb3bd;stroke-width:1.2;}
+    .ax-mod{fill:#eef4f6;stroke:#7fa3b0;stroke-width:1.1;}
+    .ax-modlbl{fill:#0B1A24;font-size:12.5px;font-weight:600;text-anchor:middle;}
+    .ax-modsub{fill:#5a7480;font-size:10px;text-anchor:middle;}
+    .ax-flow{stroke:#0A4E64;stroke-width:1.4;fill:none;}
+    .ax-flowA{stroke:#B96A12;stroke-width:1.4;fill:none;}
+    .ax-group{fill:#0E6E8C;font-size:11px;font-weight:700;letter-spacing:.08em;}
+  </style>
+
+  <!-- Outer process boundary -->
+  <rect x="170" y="20" width="580" height="370" rx="14" fill="#f7fbfc" stroke="#0E6E8C" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="190" y="44" class="ax-group">UNITY 6 / URP &#8212; SINGLE PROCESS, ONE COORDINATE FRAME</text>
+
+  <!-- Fixed-step physics group -->
+  <rect x="190" y="60" width="300" height="300" rx="10" fill="#fbfdfd" stroke="#bcd0d8" stroke-width="1"/>
+  <text x="205" y="80" class="ax-group">FIXED-STEP PHYSICS LOOP</text>
+
+  <g>
+    <rect class="ax-mod" x="206" y="92" width="268" height="44" rx="7"/>
+    <text class="ax-modlbl" x="340" y="113">Pilot control law &#183; 4-DOF</text>
+    <text class="ax-modsub" x="340" y="128">surge, sway, heave, yaw &#183; drag feed-forward</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="206" y="146" width="268" height="44" rx="7"/>
+    <text class="ax-modlbl" x="340" y="167">Actuator model</text>
+    <text class="ax-modsub" x="340" y="182">first-order thruster lag + saturation</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="206" y="200" width="268" height="44" rx="7"/>
+    <text class="ax-modlbl" x="340" y="221">6-DOF rigid-body dynamics</text>
+    <text class="ax-modsub" x="340" y="236">Fossen marine model &#183; MarineGnc helpers</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="206" y="254" width="268" height="44" rx="7"/>
+    <text class="ax-modlbl" x="340" y="275">Umbilical solver</text>
+    <text class="ax-modsub" x="340" y="290">PBD / Verlet rope &#183; reach + snag limits</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="206" y="308" width="268" height="40" rx="7"/>
+    <text class="ax-modlbl" x="340" y="327">Ocean environment</text>
+    <text class="ax-modsub" x="340" y="341">analytic Gerstner height field (physics)</text>
+  </g>
+
+  <path class="ax-flow" d="M340 136 L340 144" marker-end="url(#arrow)"/>
+  <path class="ax-flow" d="M340 190 L340 198" marker-end="url(#arrow)"/>
+  <path class="ax-flow" d="M340 244 L340 252" marker-end="url(#arrow)"/>
+
+  <!-- Render / task group -->
+  <rect x="506" y="60" width="228" height="300" rx="10" fill="#fbfdfd" stroke="#bcd0d8" stroke-width="1"/>
+  <text x="521" y="80" class="ax-group">RENDER FRAME</text>
+
+  <g>
+    <rect class="ax-mod" x="520" y="92" width="200" height="58" rx="7"/>
+    <text class="ax-modlbl" x="620" y="114">URP underwater render</text>
+    <text class="ax-modsub" x="620" y="129">KWS water &#183; selectable turbidity</text>
+    <text class="ax-modsub" x="620" y="142">procedural biofouling &#183; lights</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="520" y="162" width="200" height="48" rx="7"/>
+    <text class="ax-modlbl" x="620" y="183">FPV camera + HUD</text>
+    <text class="ax-modsub" x="620" y="198">telemetry &#183; reticles &#183; checklist</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="520" y="222" width="200" height="48" rx="7"/>
+    <text class="ax-modlbl" x="620" y="243">Inspection task</text>
+    <text class="ax-modsub" x="620" y="258">GA capture rules &#183; scoring &#183; grade</text>
+  </g>
+  <g>
+    <rect class="ax-mod" x="520" y="282" width="200" height="48" rx="7"/>
+    <text class="ax-modlbl" x="620" y="303">FPV mirror camera</text>
+    <text class="ax-modsub" x="620" y="318">offscreen target &#183; JPEG encode</text>
+  </g>
+
+  <path class="ax-flow" d="M474 222 L518 130" marker-end="url(#arrow)"/>
+  <path class="ax-flow" d="M474 228 L518 250" marker-end="url(#arrow)"/>
+
+  <!-- Input device -->
+  <g>
+    <rect class="ax-box" x="20" y="92" width="130" height="44" rx="7"/>
+    <text class="ax-modlbl" x="85" y="113">Gamepad / keyboard</text>
+    <text class="ax-modsub" x="85" y="128">remappable bindings</text>
+  </g>
+  <path class="ax-flow" d="M150 114 L204 114" marker-end="url(#arrow)"/>
+
+  <!-- Observer / stream -->
+  <g>
+    <rect class="ax-box" x="780" y="284" width="120" height="46" rx="7"/>
+    <text class="ax-modlbl" x="840" y="305">Observer</text>
+    <text class="ax-modsub" x="840" y="320">VLC / web browser</text>
+  </g>
+  <path class="ax-flowA" d="M720 306 L778 306" marker-end="url(#arrowAmber)"/>
+  <text x="724" y="298" fill="#B96A12" font-size="10" font-weight="700">MJPEG / HTTP</text>
+
+  <text x="20" y="430" fill="#46606b" font-size="12">No external ROS/Gazebo server &#183; no inter-process bridge &#183; no dual-frame conversion.</text>
+  <text x="20" y="450" fill="#46606b" font-size="12">Dynamics, control, umbilical, environment, task, rendering and the video feed share one address space.</text>
+</svg>

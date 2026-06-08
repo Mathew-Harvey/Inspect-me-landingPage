@@ -16,10 +16,27 @@ import { dirname, resolve, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = resolve(__dirname, "../assets/capturedFromGame");
+const PHOTOS = resolve(__dirname, "../assets"); // real-world reference photographs
 const OUT = resolve(__dirname, "../assets/images");
 
-// out name ← source, target width (height optional → cover-crop)
+// out name ← source, target width (height optional → cover-crop).
+// `dir` overrides the source folder (defaults to the in-game capture folder).
 const JOBS = [
+  // Hero + key story beats — real in-game captures (title screen, harbour, mission HUD)
+  { dir: PHOTOS, src: "game1.png", out: "hero-title", width: 1600 },
+  { dir: PHOTOS, src: "game2.png", out: "harbour-select", width: 1600 },
+  { dir: PHOTOS, src: "game4.png", out: "harbour-roster", width: 1600 },
+  { dir: PHOTOS, src: "game3.png", out: "mission-hud", width: 1600 },
+
+  // Earlier FPV capture (kept as a secondary still)
+  { src: "image10.png", out: "hero-fpv", width: 1920 },
+
+  // The vehicle in the field + at depth (cinematic renders, watermark cropped; 1168px native)
+  { dir: PHOTOS, src: "image (5).jpg", out: "field-deck", width: 1168 },
+  { dir: PHOTOS, src: "image (6).jpg", out: "field-reel", width: 1168 },
+  { dir: PHOTOS, src: "image (3).jpg", out: "dive-deep", width: 1168 },
+  { dir: PHOTOS, src: "image (4).jpg", out: "dive-clear", width: 1168 },
+
   // Three-vessel showcase cards (clean cinematic renders)
   { src: "image5.png", out: "vessel-destroyer", width: 900 },
   { src: "image6.png", out: "vessel-coastal", width: 900 },
@@ -36,6 +53,10 @@ const JOBS = [
   { src: "image8.png", out: "step-launch", width: 760 },
   { src: "image9.png", out: "step-dive", width: 1200 },
 
+  // Technical-paper figures (selectable-visibility comparison)
+  { src: "image10.png", out: "paper-vis-clear", width: 1100 },
+  { src: "image11.png", out: "paper-vis-murky", width: 1100 },
+
   // Social card (Open Graph / Twitter)
   { src: "og-source", file: "image5.png", out: "og-cover", width: 1200, height: 630 },
 ];
@@ -46,7 +67,7 @@ async function run() {
   await mkdir(OUT, { recursive: true });
   let total = 0;
   for (const job of JOBS) {
-    const srcFile = join(SRC, job.file || job.src);
+    const srcFile = join(job.dir || SRC, job.file || job.src);
     const base = sharp(srcFile).rotate();
     const resized = job.height
       ? base.resize({ width: job.width, height: job.height, fit: "cover", position: "centre" })
