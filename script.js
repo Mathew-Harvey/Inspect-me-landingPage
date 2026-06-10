@@ -97,7 +97,7 @@
   // ── Reveal content as it rises out of the dark ──────────────────────
   if (!reduceMotion && "IntersectionObserver" in window) {
     const targets = document.querySelectorAll(
-      ".hero-cmd, .section-head, .real-photo, .vehicle-info, .vehicle-stage, .survey-stage," +
+      ".section-head, .real-photo, .vehicle-info, .vehicle-stage, .survey-stage," +
       " .targets-intro, .harbour-banner, .vessel-card, .manifest-card, .spotlight, .spotlight-legend li," +
       " .feature, .spec-card, .walk-step, .paper-card, .follow, .faq-list details, .il-inner"
     );

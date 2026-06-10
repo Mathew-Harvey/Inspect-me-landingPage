@@ -10,7 +10,7 @@
   --bg: #05121B;          /* deep water — page background         */
   --bg-alt: #071822;      /* alternating sections                 */
   --surface: #0B1F2B;     /* console panels / cards               */
-  --text: #E9F3F6;        /* HUD text                             */
+  --text: rgba(255, 255, 255, 0.9); /* body copy — 90% white      */
   --dim: #8AA6B3;         /* muted readouts                       */
   --on-water: #E9F3F6;    /* text over imagery                    */
   --on-water-dim: #93B4C1;
@@ -23,8 +23,8 @@
   --maxw: 1180px;
   --gutter: 48px;         /* page side gutters (tightened on phones) */
   --header-h: 66px;
-  --display: "Inter", system-ui, -apple-system, sans-serif;
-  --sans: "Inter", system-ui, -apple-system, sans-serif;
+  --display: "Michroma", "Saira", system-ui, sans-serif;
+  --sans: "Saira", system-ui, -apple-system, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
   --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
 }
@@ -81,6 +81,15 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .container.narrow { width: min(720px, calc(100% - var(--gutter))); }
 
 .mono { font-family: var(--mono); }
+/* every numeral on the page reads off the same tabular mono grid */
+.mono, .eyebrow, .console-readout dt, .console-readout dd,
+.capture-count, .mc-no, .mc-pts, .vessel-count, .vessel-num,
+.feature-no, .walk-no, .pin, .pin-no, .il-depth, .dg-read,
+.hero-status, .hero-foot, .paper-meta, .platform-line,
+.theme-btn-label, .console-panel-title {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
@@ -171,7 +180,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   border-bottom-color: var(--line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 .nav { display: flex; align-items: center; justify-content: space-between; width: min(var(--maxw), calc(100% - var(--gutter))); height: 100%; margin-inline: auto; }
-.logo { display: flex; align-items: center; gap: 0.6rem; font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--text); }
+.logo { display: flex; align-items: center; gap: 0.6rem; font-family: var(--display); font-weight: 400; font-size: 0.92rem; letter-spacing: 0.05em; color: var(--text); }
 .logo-mark { width: 24px; height: 24px; border-radius: 6px; background: var(--bg-bottom); position: relative; flex-shrink: 0; }
 .logo-mark::before { content: ""; position: absolute; left: 3px; right: 3px; top: 50%; height: 1.5px; background: var(--teal); }
 .logo-mark::after { content: ""; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
@@ -232,6 +241,33 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .hero-status b { color: var(--teal); font-weight: 700; }
 .hero-status .spacer { margin-left: auto; }
 
+/* ── Title lockup: kicker / ROV / SIMULATOR / tagline ── */
+.hero-lockup { margin: 0 0 1.8rem; }
+.hero-kicker {
+  margin: 0 0 1rem;
+  font-family: var(--sans); font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--teal);
+}
+.hero-title {
+  margin: 0; font-family: var(--display); font-weight: 400;
+  line-height: 0.95; text-transform: uppercase; letter-spacing: 0.01em;
+}
+.ht-line { display: block; }
+.ht-rov {
+  font-size: clamp(3.2rem, 10vw, 6.6rem); color: var(--teal);
+  text-shadow: 0 0 38px color-mix(in srgb, var(--teal) 40%, transparent);
+}
+.ht-sim {
+  font-size: clamp(1.5rem, 4.6vw, 3rem); color: var(--text);
+  letter-spacing: 0.06em;
+}
+.hero-tagline {
+  margin: 1.2rem 0 0;
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--dim);
+}
+.hero-tagline .dot { color: var(--teal); }
+
 /* the cinematic poster, framed as an ROV monitor */
 .hero-console {
   position: relative; margin: 0; border-radius: 12px; overflow: hidden;
@@ -250,7 +286,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   display: grid; grid-template-columns: 1fr auto; gap: 1.2rem 2.6rem;
   align-items: center; margin-top: 1.9rem;
 }
-.hero-lede { color: var(--on-water); font-size: 1.16rem; font-weight: 300; line-height: 1.6; max-width: 40rem; }
+.hero-lede { color: var(--on-water); font-size: 1.16rem; font-weight: 400; line-height: 1.6; max-width: 40rem; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
 .hero-foot {
   grid-column: 1 / -1; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
@@ -270,7 +306,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   border: 1px solid var(--hair); box-shadow: 0 24px 50px -34px rgba(0, 0, 0, 0.8); }
 .real-photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
 .real-photo figcaption { margin-top: 0.8rem; color: var(--dim); font-size: 0.88rem;
-  font-weight: 300; line-height: 1.5; }
+  font-weight: 400; line-height: 1.5; }
 
 /* ── The vehicle: interactive ROV console ── */
 .section-console { position: relative; overflow: hidden; }
@@ -292,8 +328,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .rov-viewer:active { cursor: grabbing; }
 .rov-fallback { width: 100%; height: 100%; object-fit: contain; }
 .vehicle-info h2 {
-  font-family: var(--display); font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 600;
-  letter-spacing: -0.02em; line-height: 1.1; color: var(--text);
+  font-family: var(--display); font-size: clamp(1.45rem, 3vw, 2.1rem); font-weight: 400;
+  letter-spacing: 0.01em; line-height: 1.15; color: var(--text);
 }
 .vehicle-info .section-sub { margin-top: 1rem; }
 .vehicle-readout { margin-top: 1.6rem; max-width: 320px; }
@@ -304,8 +340,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .section { padding: 6rem 0; background: var(--bg); transition: background-color 0.6s var(--ease); }
 .section-alt { background: var(--bg-alt); }
 .section-head { max-width: 640px; margin-bottom: 3rem; }
-.section-head h2 { font-family: var(--display); font-size: clamp(1.9rem, 4vw, 2.9rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; color: var(--text); }
-.section-sub { margin-top: 1rem; color: var(--dim); font-weight: 300; line-height: 1.65; }
+.section-head h2 { font-family: var(--display); font-size: clamp(1.55rem, 3.3vw, 2.3rem); font-weight: 400; letter-spacing: 0.01em; line-height: 1.15; color: var(--text); }
+.section-sub { margin-top: 1rem; color: var(--dim); font-weight: 400; line-height: 1.65; }
 
 /* ── Viewport: the shared "ROV monitor" frame for in-game imagery ── */
 .viewport {
@@ -343,7 +379,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .capture-count { margin-left: auto; color: var(--amber); font-weight: 500; }
 
 .survey-cap {
-  padding: 0.85rem 1.1rem; font-size: 0.85rem; font-weight: 300; line-height: 1.55;
+  padding: 0.85rem 1.1rem; font-size: 0.85rem; font-weight: 400; line-height: 1.55;
   color: var(--on-water-dim); background: #06141C;
   border-top: 1px solid color-mix(in srgb, var(--teal) 22%, transparent);
 }
@@ -405,8 +441,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .mc-no { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.16em; color: var(--dim); }
 .mc-pts { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
 .mc-pts b { font-size: 1.7rem; font-weight: 700; color: var(--teal); letter-spacing: 0; margin-right: 0.18rem; }
-.manifest-card h3 { font-family: var(--display); font-size: 1.04rem; font-weight: 600; color: var(--text); line-height: 1.2; }
-.manifest-card p { color: var(--dim); font-size: 0.85rem; font-weight: 300; line-height: 1.5; margin: 0; }
+.manifest-card h3 { font-family: var(--sans); font-size: 1.04rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+.manifest-card p { color: var(--dim); font-size: 0.85rem; font-weight: 400; line-height: 1.5; margin: 0; }
 
 /* ── Vessel showcase (legacy 3-card; kept for reference) ── */
 .vessel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
@@ -414,10 +450,10 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .vessel-media img { aspect-ratio: 16 / 10; object-fit: cover; }
 .vessel-body { display: flex; flex-direction: column; gap: 0.5rem; }
 .vessel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-.vessel-head h3 { font-family: var(--display); font-size: 1.18rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+.vessel-head h3 { font-family: var(--sans); font-size: 1.18rem; font-weight: 600; color: var(--text); line-height: 1.2; }
 .vessel-count { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); text-align: right; line-height: 1.25; flex-shrink: 0; }
 .vessel-num { display: block; font-size: 1.75rem; font-weight: 700; color: var(--teal); letter-spacing: 0; }
-.vessel-desc { color: var(--dim); font-size: 0.92rem; font-weight: 300; line-height: 1.5; }
+.vessel-desc { color: var(--dim); font-size: 0.92rem; font-weight: 400; line-height: 1.5; }
 
 /* ── Feature spotlight: annotated live HUD ── */
 .spotlight { margin-bottom: 1.5rem; }
@@ -429,7 +465,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 }
 .pin::after { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1.5px solid var(--amber); opacity: 0.55; animation: ping 2.6s var(--ease) infinite; }
 .spotlight-legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem 2.2rem; }
-.spotlight-legend li { display: flex; gap: 0.7rem; align-items: flex-start; color: var(--dim); font-size: 0.9rem; font-weight: 300; line-height: 1.5; }
+.spotlight-legend li { display: flex; gap: 0.7rem; align-items: flex-start; color: var(--dim); font-size: 0.9rem; font-weight: 400; line-height: 1.5; }
 .spotlight-legend strong { color: var(--text); font-weight: 600; }
 .pin-no { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 0.1rem; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--amber) 18%, transparent); color: var(--amber); font-family: var(--mono); font-size: 0.72rem; font-weight: 600; }
 
@@ -438,14 +474,14 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .feature { padding: 2.2rem 1.8rem 2.2rem 0; border-bottom: 1px solid var(--line); }
 .feature-grid .feature:not(:nth-child(3n+1)) { padding-left: 1.8rem; border-left: 1px solid var(--line); }
 .feature-no { font-family: var(--mono); font-size: 0.8rem; color: var(--teal); }
-.feature h3 { font-family: var(--display); font-size: 1.2rem; font-weight: 600; color: var(--text); margin: 0.7rem 0 0.55rem; }
-.feature p { color: var(--dim); font-size: 0.93rem; font-weight: 300; line-height: 1.6; }
+.feature h3 { font-family: var(--sans); font-size: 1.2rem; font-weight: 600; color: var(--text); margin: 0.7rem 0 0.55rem; }
+.feature p { color: var(--dim); font-size: 0.93rem; font-weight: 400; line-height: 1.6; }
 
 /* ── Spec cards ── */
 .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .spec-card { padding: 1.8rem; border: 1px solid var(--hair); border-radius: 8px; background: var(--surface); }
-.spec-card h3 { font-family: var(--display); font-size: 1.15rem; font-weight: 600; color: var(--text); margin-bottom: 1.1rem; }
-.spec-card li { position: relative; padding-left: 1rem; margin-bottom: 0.7rem; color: var(--dim); font-size: 0.92rem; font-weight: 300; line-height: 1.55; }
+.spec-card h3 { font-family: var(--sans); font-size: 1.15rem; font-weight: 600; color: var(--text); margin-bottom: 1.1rem; }
+.spec-card li { position: relative; padding-left: 1rem; margin-bottom: 0.7rem; color: var(--dim); font-size: 0.92rem; font-weight: 400; line-height: 1.55; }
 .spec-card li::before { content: "›"; position: absolute; left: 0; color: var(--teal); }
 .spec-card strong { color: var(--text); font-weight: 600; }
 
@@ -455,8 +491,8 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .walk-step:nth-child(even) .walk-media { order: 2; }
 .walk-media img { max-height: 540px; object-fit: contain; }
 .walk-text .walk-no { font-family: var(--mono); font-size: 0.8rem; color: var(--teal); }
-.walk-text h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 600; color: var(--text); margin: 0.5rem 0; }
-.walk-text p { color: var(--dim); font-weight: 300; line-height: 1.6; }
+.walk-text h3 { font-family: var(--sans); font-size: 1.3rem; font-weight: 600; color: var(--text); margin: 0.5rem 0; }
+.walk-text p { color: var(--dim); font-weight: 400; line-height: 1.6; }
 
 /* ── Technical paper ── */
 .paper-card {
@@ -468,16 +504,16 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
   transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease); }
 .paper-cover:hover { transform: translateY(-3px); box-shadow: 0 28px 56px -26px rgba(0, 0, 0, 0.9); }
 .paper-cover img { display: block; width: 100%; height: auto; }
-.paper-body h3 { font-family: var(--display); font-size: 1.3rem; font-weight: 600; line-height: 1.25;
+.paper-body h3 { font-family: var(--sans); font-size: 1.3rem; font-weight: 600; line-height: 1.25;
   color: var(--text); margin-bottom: 0.7rem; }
 .paper-meta { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-.paper-abs { color: var(--dim); font-weight: 300; line-height: 1.65; margin-bottom: 1.4rem; }
+.paper-abs { color: var(--dim); font-weight: 400; line-height: 1.65; margin-bottom: 1.4rem; }
 .paper-body .actions { gap: 1.2rem; }
 
 /* ── Follow ── */
 .follow { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: center; padding: 3rem; border-radius: 14px; background: var(--bg-bottom); color: var(--on-water); }
 .follow .eyebrow { color: var(--amber); }
-.follow h2 { font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; color: var(--on-water); margin-bottom: 1rem; }
+.follow h2 { font-family: var(--display); font-size: clamp(1.3rem, 2.5vw, 1.8rem); font-weight: 400; letter-spacing: 0.01em; line-height: 1.2; color: var(--on-water); margin-bottom: 1rem; }
 .follow .section-sub { color: var(--on-water-dim); }
 .follow-side { display: flex; flex-direction: column; align-items: flex-start; gap: 1.1rem; }
 .platform-line { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; color: var(--on-water-dim); }
@@ -489,7 +525,7 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .faq-list summary::-webkit-details-marker { display: none; }
 .faq-list summary::after { content: "+"; font-size: 1.3rem; color: var(--teal); transition: transform 0.2s; }
 .faq-list details[open] summary::after { transform: rotate(45deg); }
-.faq-list p { margin-top: 0.8rem; color: var(--dim); font-size: 0.94rem; font-weight: 300; line-height: 1.65; }
+.faq-list p { margin-top: 0.8rem; color: var(--dim); font-size: 0.94rem; font-weight: 400; line-height: 1.65; }
 .faq-list a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ── Footer ── */
@@ -607,13 +643,13 @@ html.js .reveal.is-in {
   font-size: clamp(2.6rem, 8vw, 5rem); letter-spacing: 0.02em; text-shadow: 0 0 30px color-mix(in srgb, var(--teal) 45%, transparent);
 }
 .il-depth span { font-size: 0.34em; color: var(--on-water-dim); margin-left: 0.2em; letter-spacing: 0.1em; }
-.il-line { margin-top: 1rem; color: var(--on-water); font-size: clamp(1.05rem, 2.2vw, 1.4rem); font-weight: 300; line-height: 1.5; }
+.il-line { margin-top: 1rem; color: var(--on-water); font-size: clamp(1.05rem, 2.2vw, 1.4rem); font-weight: 400; line-height: 1.5; }
 .il-tag { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--on-water-dim); margin-bottom: 0.9rem; }
 
 /* ── Harbour establishing banner (vessel select, both roster pages) ── */
 .harbour-banner { margin-bottom: 2.4rem; }
 .harbour-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.harbour-cap { margin-top: 0.9rem; font-size: 0.9rem; font-weight: 300; color: var(--dim); text-align: center; }
+.harbour-cap { margin-top: 0.9rem; font-size: 0.9rem; font-weight: 400; color: var(--dim); text-align: center; }
 .harbour-cap .mono { color: var(--teal); letter-spacing: 0.08em; }
 
 /* ============================================================
@@ -650,6 +686,9 @@ html.js .reveal.is-in {
   .hero { padding: calc(var(--header-h) + 1.4rem) 0 2.6rem; }
   .hero-status { gap: 0.35rem 1rem; margin-bottom: 1rem; padding-bottom: 0.7rem; font-size: 0.62rem; }
   .hero-status .spacer { margin-left: 0; }
+  .hero-lockup { margin-bottom: 1.4rem; }
+  .hero-kicker { font-size: 0.66rem; }
+  .hero-tagline { font-size: 0.6rem; }
   .hero-lede { font-size: 1.04rem; }
   .actions .btn-primary { flex: 1 1 auto; }
   .rov-viewer { height: min(340px, 44vh); }
