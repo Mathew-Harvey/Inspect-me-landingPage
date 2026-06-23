@@ -39,7 +39,7 @@ const FIGURES = {
     <span class="subfig"><img src="assets/images/field-deck.jpg" alt="A light inspection-class ROV on a quayside with its surface tether reel" /><span class="sublbl">(a)</span></span>
     <span class="subfig"><img src="assets/images/field-reel.jpg" alt="The ROV and its tether reel staged at the waterline before deployment" /><span class="sublbl">(b)</span></span>
   </div>
-  <figcaption><b>Figure {N}.</b> The reference vehicle class (illustrative renders). A light inspection-class ROV with its surface tether reel: (a) the open frame, vectored thrusters and twin pressure housings on the quay; (b) staged at the waterline before deployment. Inspect&#8209;Me models this category — a compact, near-neutrally buoyant observation vehicle flown on four degrees of freedom by a single pilot.</figcaption>
+  <figcaption><b>Figure {N}.</b> The reference vehicle class (illustrative renders). A light inspection-class ROV with its surface tether reel: (a) the open frame, vectored thrusters and twin pressure housings on the quay; (b) staged at the waterline before deployment. ROView models this category — a compact, near-neutrally buoyant observation vehicle flown on four degrees of freedom by a single pilot.</figcaption>
 </figure>`,
   arch: `
 <figure class="fig">
@@ -86,7 +86,7 @@ async function buildHtmlBody() {
   let md = await readFile(SRC, "utf8");
 
   // Split off the title / authors / abstract so we can render a clean header.
-  const title = (md.match(/^#\s+(.+)$/m)?.[1] || "Inspect-Me Technical Paper").trim();
+  const title = (md.match(/^#\s+(.+)$/m)?.[1] || "ROView Technical Paper").trim();
   const absStart = md.indexOf("## Abstract");
   const introStart = md.indexOf("## 1. Introduction");
   const front = md.slice(0, absStart);
@@ -142,8 +142,8 @@ function page({ title, authors, affiliation, abstractHtml, keywords, bodyHtml })
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="${title} — a technical paper on the Inspect-Me light inspection-class ROV training simulator." />
-<title>${title} — Inspect-Me</title>
+<meta name="description" content="${title} — a technical paper on ROView, the light inspection-class ROV training simulator." />
+<title>${title} — ROView</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E2A38'/%3E%3Cpath d='M2 18h28' stroke='%230E6E8C' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='12' r='3.4' fill='%23E8A13C'/%3E%3C/svg%3E" />
 <link rel="stylesheet" href="assets/vendor/katex/katex.min.css" />
 <style>
@@ -245,12 +245,12 @@ function page({ title, authors, affiliation, abstractHtml, keywords, bodyHtml })
 </head>
 <body>
   <div class="toolbar no-print">
-    <a class="home" href="index.html">&#8592; Inspect-Me</a>
+    <a class="home" href="index.html">&#8592; ROView</a>
     <a class="dl" href="downloads/Inspect-Me-Simulator-Paper.pdf" download>Download PDF</a>
   </div>
   <article class="sheet">
     <div class="brand">
-      <span class="mark"><span class="dot"></span> <b>Inspect&#8209;Me</b></span>
+      <span class="mark"><span class="dot"></span> <b>ROView</b></span>
       <span>Technical Paper &middot; Preprint</span>
     </div>
     <h1 class="title">${title}</h1>
@@ -259,7 +259,7 @@ function page({ title, authors, affiliation, abstractHtml, keywords, bodyHtml })
     <div class="abstract"><span class="lbl">Abstract</span>${abstractHtml}</div>
     ${keywords ? `<p class="keywords"><b>Keywords —</b> ${keywords}</p>` : ""}
     ${bodyHtml}
-    <p class="foot">Inspect&#8209;Me &middot; light inspection-class ROV training simulator &middot; ${year}. Generated from the project paper; figures are real photographs, in-sim captures, or hand-authored diagrams.</p>
+    <p class="foot">ROView &middot; light inspection-class ROV training simulator &middot; ${year}. Generated from the project paper; figures are real photographs, in-sim captures, or hand-authored diagrams.</p>
   </article>
 </body>
 </html>`;

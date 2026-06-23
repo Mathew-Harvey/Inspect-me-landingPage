@@ -1,7 +1,7 @@
-# Inspect-Me Landing Page
+# ROView Landing Page
 
-Marketing site for the **Inspect-Me** light inspection-class ROV training
-simulator. Static HTML/CSS/JS — no build step.
+Marketing site for **ROView — Inspection Class SIM**, the light inspection-class
+ROV training simulator. Static HTML/CSS/JS — no build step.
 
 ## Concept — "Operations console"
 

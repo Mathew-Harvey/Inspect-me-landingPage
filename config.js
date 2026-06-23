@@ -1,5 +1,5 @@
 /**
- * Site configuration.
+ * Site configuration — ROView (Inspection Class SIM).
  *
  * githubUrl   — overrides the GitHub links on the page (optional; links are also hard-coded).
  * contactEmail — collaboration / contact address (used in FAQ + footer mailto links).

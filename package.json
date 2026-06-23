@@ -2,7 +2,7 @@
   "name": "inspect-me-landing",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for the Inspect-Me light inspection-class ROV training simulator.",
+  "description": "Marketing site for ROView — Inspection Class SIM, a light inspection-class ROV training simulator.",
   "type": "module",
   "scripts": {
     "build:captures": "node tools/process-captures.mjs",

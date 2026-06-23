@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Inspect-Me — a light inspection-class ROV pilot training simulator. Deploy, survey, surface: photo-survey ship hulls and submerged structures with realistic hydrodynamics, FPV control, and a live video stream. In active development." />
+  <meta name="description" content="ROView — Inspection Class SIM. A light inspection-class ROV pilot training simulator. Deploy, survey, surface: photo-survey ship hulls and submerged structures with realistic hydrodynamics, FPV control, and a live video stream. In active development." />
   <meta name="theme-color" content="#05121B" />
   <meta name="color-scheme" content="light dark" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E2A38'/%3E%3Cpath d='M2 18h28' stroke='%230E6E8C' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='12' r='3.4' fill='%23E8A13C'/%3E%3C/svg%3E" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Inspect-Me — Deploy. Survey. Surface." />
+  <meta property="og:title" content="ROView — Inspection Class SIM" />
   <meta property="og:description" content="The training simulator for light inspection-class ROV pilots. Photo-survey ship hulls and submerged structures. In active development." />
   <meta property="og:image" content="assets/images/og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Inspect-Me — Deploy. Survey. Surface." />
+  <meta name="twitter:title" content="ROView — Inspection Class SIM" />
   <meta name="twitter:description" content="The training simulator for light inspection-class ROV pilots." />
   <meta name="twitter:image" content="assets/images/og-cover.jpg" />
 
-  <title>Inspect-Me — Deploy. Survey. Surface.</title>
+  <title>ROView — Inspection Class SIM</title>
 
   <!-- set theme before paint (no flash) -->
   <script>
@@ -70,9 +70,9 @@
 
   <header class="site-header" id="top">
     <nav class="nav" aria-label="Primary">
-      <a class="logo" href="#top" aria-label="Inspect-Me home">
+      <a class="logo" href="#top" aria-label="ROView home">
         <span class="logo-mark" aria-hidden="true"></span>
-        <span class="logo-text">Inspect-Me</span>
+        <span class="logo-text">ROView</span>
       </a>
       <ul class="nav-links">
         <li><a href="#survey">The survey</a></li>
@@ -87,7 +87,7 @@
           <span class="theme-btn-track"><span class="theme-btn-thumb"></span></span>
           <span class="theme-btn-label" id="theme-btn-label">Surface</span>
         </button>
-        <a class="nav-github" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer" aria-label="Inspect-Me on GitHub">
+        <a class="nav-github" href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer" aria-label="ROView on GitHub">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
         </a>
         <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
@@ -118,13 +118,13 @@
           <span class="spacer">BUILT IN UNITY · URP</span>
         </p>
 
-        <h1 class="sr-only" id="hero-title">Inspect-Me — Deploy. Survey. Surface. A light inspection-class ROV pilot training simulator.</h1>
+        <h1 class="sr-only" id="hero-title">ROView — Inspection Class SIM. Deploy. Survey. Surface. A light inspection-class ROV pilot training simulator.</h1>
 
         <figure class="hero-console">
           <picture>
             <source srcset="assets/images/hero-title.webp" type="image/webp" />
             <img src="assets/images/hero-title.jpg"
-              alt="The Inspect-Me title screen: the yellow light inspection-class ROV suspended over a harbour, with the Deploy · Survey · Surface tagline and the mission menu"
+              alt="The ROView title screen: the yellow light inspection-class ROV suspended over a harbour, with the Deploy · Survey · Surface tagline and the mission menu"
               width="1614" height="905" fetchpriority="high" decoding="async" />
           </picture>
           <span class="scanline" aria-hidden="true"></span>
@@ -150,7 +150,7 @@
           <p class="eyebrow">The vehicle, topside</p>
           <h2>On the quay, then over the side.</h2>
           <p class="section-sub">A compact light inspection-class ROV and its surface tether reel, staged on the
-            wharf before a dive. Inspect-Me models this vehicle class: four-degree-of-freedom handling,
+            wharf before a dive. ROView models this vehicle class: four-degree-of-freedom handling,
             finite-reel umbilical management, and the hull-survey workflow it's built for.</p>
         </header>
         <div class="real-rov-grid">
@@ -296,7 +296,7 @@
             <figure class="viewport" data-label="ROSTER · 1–4">
               <picture>
                 <source srcset="assets/images/harbour-select.webp" type="image/webp" />
-                <img src="assets/images/harbour-select.jpg" alt="The Inspect-Me harbour with a liner, a tug and a submarine alongside, and the Select Target Vessel panel showing the destroyer, coastal defence ship, submarine and ocean liner" width="1605" height="897" loading="lazy" decoding="async" />
+                <img src="assets/images/harbour-select.jpg" alt="The ROView harbour with a liner, a tug and a submarine alongside, and the Select Target Vessel panel showing the destroyer, coastal defence ship, submarine and ocean liner" width="1605" height="897" loading="lazy" decoding="async" />
               </picture>
             </figure>
             <figure class="viewport" data-label="ROSTER · 5–8">
@@ -505,13 +505,13 @@
         <header class="section-head">
           <p class="eyebrow">The engineering</p>
           <h2>Read the paper behind it.</h2>
-          <p class="section-sub">Inspect-Me is documented as a technical paper: the 6-DOF marine
+          <p class="section-sub">ROView is documented as a technical paper: the 6-DOF marine
             dynamics, the 4-DOF pilot model, the in-engine architecture, the procedural biofouling and
             the simulated finite-reel umbilical — written up in full, with the maths.</p>
         </header>
         <div class="paper-card">
-          <a class="paper-cover" href="downloads/Inspect-Me-Simulator-Paper.pdf" aria-label="Download the Inspect-Me technical paper (PDF)">
-            <img src="assets/images/paper-cover.jpg" alt="First page of the Inspect-Me technical paper" width="900" height="1170" loading="lazy" decoding="async" />
+          <a class="paper-cover" href="downloads/Inspect-Me-Simulator-Paper.pdf" aria-label="Download the ROView technical paper (PDF)">
+            <img src="assets/images/paper-cover.jpg" alt="First page of the ROView technical paper" width="900" height="1170" loading="lazy" decoding="async" />
           </a>
           <div class="paper-body">
             <h3>A Self-Contained Unity Simulator for Light Inspection-Class ROV Pilot Training</h3>
@@ -536,7 +536,7 @@
           <div>
             <p class="eyebrow">Launching soon</p>
             <h2>Not ready to dive in yet — but close.</h2>
-            <p class="section-sub">Inspect-Me is in active development and the first release will be free to play.
+            <p class="section-sub">ROView is in active development and the first release will be free to play.
               Star or watch the project on GitHub to know the moment the build drops.</p>
           </div>
           <div class="follow-side">
@@ -557,7 +557,7 @@
         <div class="faq-list">
           <details>
             <summary>When will it be available?</summary>
-            <p>Inspect-Me is in active development. Star or watch the GitHub repo to get notified when the first public build drops.</p>
+            <p>ROView is in active development. Star or watch the GitHub repo to get notified when the first public build drops.</p>
           </details>
           <details>
             <summary>How much will it cost?</summary>
@@ -565,7 +565,7 @@
           </details>
           <details>
             <summary>Is this tied to a specific ROV manufacturer?</summary>
-            <p>No. Inspect-Me models the light inspection-class category — compact tethered vehicles with 4-DOF piloting and FPV workflows common across the industry. No brand names appear in the simulator.</p>
+            <p>No. ROView models the light inspection-class category — compact tethered vehicles with 4-DOF piloting and FPV workflows common across the industry. No brand names appear in the simulator.</p>
           </details>
           <details>
             <summary>Can observers watch the FPV feed separately?</summary>
@@ -577,7 +577,7 @@
           </details>
           <details>
             <summary>Are you an ROV manufacturer?</summary>
-            <p>If you build ROVs and would like to discuss collaboration, we'd love to hear from you — reach out at <a href="mailto:mathewharvey@gmail.com?subject=Inspect-Me%20collaboration">mathewharvey@gmail.com</a>.</p>
+            <p>If you build ROVs and would like to discuss collaboration, we'd love to hear from you — reach out at <a href="mailto:mathewharvey@gmail.com?subject=ROView%20collaboration">mathewharvey@gmail.com</a>.</p>
           </details>
         </div>
       </div>
@@ -586,9 +586,9 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <a class="logo" href="#top" aria-label="Inspect-Me home">
+      <a class="logo" href="#top" aria-label="ROView home">
         <span class="logo-mark" aria-hidden="true"></span>
-        <span class="logo-text">Inspect-Me</span>
+        <span class="logo-text">ROView</span>
       </a>
       <nav class="footer-links" aria-label="Footer">
         <a href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -596,7 +596,7 @@
         <a href="mailto:mathewharvey@gmail.com">Contact</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <p class="footer-copy">© <span id="year"></span> Inspect-Me · light inspection-class ROV training simulator.</p>
+      <p class="footer-copy">© <span id="year"></span> ROView — Inspection Class SIM · light inspection-class ROV training simulator.</p>
     </div>
   </footer>
 
