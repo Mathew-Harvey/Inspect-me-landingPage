@@ -75,10 +75,10 @@
         <span class="logo-text">ROView</span>
       </a>
       <ul class="nav-links">
+        <li><a href="#vehicle">The ROV</a></li>
         <li><a href="#survey">The survey</a></li>
         <li><a href="#vessels">Vessels</a></li>
         <li><a href="#features">Features</a></li>
-        <li><a href="#rov-class">ROV class</a></li>
         <li><a href="#paper">Paper</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
@@ -98,10 +98,10 @@
   </header>
 
   <div class="mobile-menu" id="mobile-menu" hidden>
+    <a href="#vehicle">The ROV</a>
     <a href="#survey">The survey</a>
     <a href="#vessels">Vessels</a>
     <a href="#features">Features</a>
-    <a href="#rov-class">ROV class</a>
     <a href="#paper">Paper</a>
     <a href="#faq">FAQ</a>
     <a href="https://github.com/Mathew-Harvey/Inspect-Me" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
@@ -127,7 +127,6 @@
               alt="The ROView title screen: the yellow light inspection-class ROV suspended over a harbour, with the Deploy · Survey · Surface tagline and the mission menu"
               width="1614" height="905" fetchpriority="high" decoding="async" />
           </picture>
-          <span class="scanline" aria-hidden="true"></span>
         </figure>
         <p class="hero-shotnote mono">Actual in-engine title screen · work-in-progress build</p>
 
@@ -143,36 +142,7 @@
       </div>
     </section>
 
-    <!-- ───────────── REFERENCE VEHICLE: real photographs ───────────── -->
-    <section class="section" id="real-rov">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">The vehicle, topside</p>
-          <h2>On the quay, then over the side.</h2>
-          <p class="section-sub">A compact light inspection-class ROV and its surface tether reel, staged on the
-            wharf before a dive. ROView models this vehicle class: four-degree-of-freedom handling,
-            finite-reel umbilical management, and the hull-survey workflow it's built for.</p>
-        </header>
-        <div class="real-rov-grid">
-          <figure class="real-photo">
-            <picture>
-              <source srcset="assets/images/field-deck.webp" type="image/webp" />
-              <img src="assets/images/field-deck.jpg" alt="A light inspection-class ROV on a quayside with its tether reel, cranes and a ship in the background" width="1168" height="806" loading="lazy" decoding="async" />
-            </picture>
-            <figcaption>Open-frame ROV on the quay — vectored thrusters, twin pressure housings, camera and lights.</figcaption>
-          </figure>
-          <figure class="real-photo">
-            <picture>
-              <source srcset="assets/images/field-reel.webp" type="image/webp" />
-              <img src="assets/images/field-reel.jpg" alt="The ROV staged at the waterline with its yellow umbilical wound onto a surface tether reel" width="1168" height="806" loading="lazy" decoding="async" />
-            </picture>
-            <figcaption>The surface tether reel and umbilical — finite-reel management the sim makes you practise.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── THE VEHICLE: interactive ROV console ───────────── -->
+    <!-- ───────────── THE VEHICLE: interactive ROV console + real photographs ───────────── -->
     <section class="section section-alt section-console" id="vehicle">
       <div class="hud-grid" aria-hidden="true"></div>
       <div class="container vehicle-wrap">
@@ -215,6 +185,26 @@
             <dt>Tether</dt><dd>56.3 m</dd>
             <dt>Mode</dt><dd class="alert">MANUAL</dd>
           </dl>
+        </div>
+      </div>
+
+      <div class="container vehicle-real">
+        <p class="vehicle-real-cap"><span class="mono">REFERENCE VEHICLE</span> — the real light inspection-class ROV ROView is modelled on: vectored thrusters, twin pressure housings, and the surface tether reel you manage on every dive.</p>
+        <div class="real-rov-grid">
+          <figure class="real-photo">
+            <picture>
+              <source srcset="assets/images/field-deck.webp" type="image/webp" />
+              <img src="assets/images/field-deck.jpg" alt="A light inspection-class ROV on a quayside with its tether reel, cranes and a ship in the background" width="1168" height="806" loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>On the quay — vectored thrusters, twin pressure housings, camera and lights.</figcaption>
+          </figure>
+          <figure class="real-photo">
+            <picture>
+              <source srcset="assets/images/field-reel.webp" type="image/webp" />
+              <img src="assets/images/field-reel.jpg" alt="The ROV staged at the waterline with its yellow umbilical wound onto a surface tether reel" width="1168" height="806" loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>The surface tether reel and umbilical — finite-reel management the sim makes you practise.</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -394,113 +384,8 @@
       </div>
     </section>
 
-    <!-- ───────────── ROV CLASS ───────────── -->
-    <section class="section section-alt" id="rov-class">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Light inspection class</p>
-          <h2>The ROV category you're training on.</h2>
-          <p class="section-sub">No brand names — just the vehicle class used worldwide for visual inspection in ports, dams, aquaculture, and industrial assets.</p>
-        </header>
-        <div class="spec-grid">
-          <div class="spec-card">
-            <h3>Typical profile</h3>
-            <ul>
-              <li><strong>Size</strong> Compact — often under 1 m, tens of kg in air</li>
-              <li><strong>Depth rating</strong> Shallow to moderate (100–300 m class)</li>
-              <li><strong>Propulsion</strong> 4–6 thrusters — horizontal, vertical, vectored</li>
-              <li><strong>Power</strong> Surface-supplied via tether umbilical</li>
-            </ul>
-          </div>
-          <div class="spec-card">
-            <h3>Real-world missions</h3>
-            <ul>
-              <li>Port, marina &amp; harbor infrastructure surveys</li>
-              <li>Vessel hull, propeller &amp; rudder inspection</li>
-              <li>Dam, lock &amp; hydroelectric structure checks</li>
-              <li>Pipeline, cable &amp; aquaculture monitoring</li>
-            </ul>
-          </div>
-          <div class="spec-card">
-            <h3>Why sim training matters</h3>
-            <ul>
-              <li>Build muscle memory before expensive field time</li>
-              <li>Practice precision in current and limited visibility</li>
-              <li>Learn dual-display workflows (pilot + observer)</li>
-              <li>Fail safely — recover from collisions and drift</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── MISSION WALKTHROUGH ───────────── -->
-    <section class="section" id="walkthrough">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">A dive, end to end</p>
-          <h2>Brief. Plan. Descend.</h2>
-          <p class="section-sub">Work-in-progress footage from the current build — the loop you'll run on every mission.</p>
-        </header>
-        <ol class="walk-steps">
-          <li class="walk-step">
-            <div class="walk-media viewport" data-label="STEP 01 · BRIEF">
-              <picture>
-                <source srcset="assets/images/step-select.webp" type="image/webp" />
-                <img src="assets/images/step-select.jpg" alt="The Select Target Vessel screen, choosing between destroyer, coastal defence ship and submarine" width="1100" height="617" loading="lazy" decoding="async" />
-              </picture>
-            </div>
-            <div class="walk-text">
-              <span class="walk-no">01</span>
-              <h3>Pick the target</h3>
-              <p>Choose a vessel and read its brief — hull type, draught, and how many inspection points it carries.</p>
-            </div>
-          </li>
-          <li class="walk-step">
-            <div class="walk-media viewport" data-label="STEP 02 · PLAN">
-              <picture>
-                <source srcset="assets/images/step-launch.webp" type="image/webp" />
-                <img src="assets/images/step-launch.jpg" alt="A top-down launch-point planner offering port, starboard and stern entry around the hull" width="760" height="1097" loading="lazy" decoding="async" />
-              </picture>
-            </div>
-            <div class="walk-text">
-              <span class="walk-no">02</span>
-              <h3>Plan your approach</h3>
-              <p>Drop in from port, starboard, or stern — pick the launch point that gives you the cleanest run at the hull.</p>
-            </div>
-          </li>
-          <li class="walk-step">
-            <div class="walk-media viewport" data-label="STEP 03 · DESCEND">
-              <picture>
-                <source srcset="assets/images/step-dive.webp" type="image/webp" />
-                <img src="assets/images/step-dive.jpg" alt="An ROV inspecting a submarine hull at depth, with live telemetry and the wireframe survey grid" width="1200" height="671" loading="lazy" decoding="async" />
-              </picture>
-            </div>
-            <div class="walk-text">
-              <span class="walk-no">03</span>
-              <h3>Dive and inspect</h3>
-              <p>Fly the hull on the sticks, line up each component, and photograph it. Surface with the survey done.</p>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ───────────── DEPTH INTERLUDE · working depth ───────────── -->
-    <section class="interlude" aria-label="At working depth">
-      <picture>
-        <source srcset="assets/images/dive-deep.webp" type="image/webp" />
-        <img src="assets/images/dive-deep.jpg" alt="The ROV at working depth in dark water, lit only by its own spotlights" width="1168" height="806" loading="lazy" decoding="async" />
-      </picture>
-      <div class="il-inner">
-        <p class="il-tag">Working depth</p>
-        <p class="il-depth">40<span>m</span></p>
-        <p class="il-line">Lights on, marine snow drifting. Just the pilot, the hull, and the engineering behind it.</p>
-      </div>
-    </section>
-
     <!-- ───────────── TECHNICAL PAPER ───────────── -->
-    <section class="section" id="paper">
+    <section class="section section-alt" id="paper">
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">The engineering</p>
@@ -530,7 +415,7 @@
     </section>
 
     <!-- ───────────── FOLLOW ───────────── -->
-    <section class="section section-alt" id="follow">
+    <section class="section" id="follow">
       <div class="container">
         <div class="follow">
           <div>
