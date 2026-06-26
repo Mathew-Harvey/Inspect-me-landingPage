@@ -98,7 +98,7 @@
   if (!reduceMotion && "IntersectionObserver" in window) {
     const targets = document.querySelectorAll(
       ".hero-cmd, .section-head, .real-photo, .vehicle-info, .vehicle-stage, .survey-stage," +
-      " .targets-intro, .harbour-banner, .manifest-card, .spotlight, .spotlight-legend li," +
+      " .targets-intro, .harbour-banner, .manifest-card, .op-card, .spotlight, .spotlight-legend li," +
       " .feature, .paper-card, .follow, .faq-list details, .il-inner"
     );
     const io = new IntersectionObserver(

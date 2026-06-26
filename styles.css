@@ -408,6 +408,39 @@ h1, h2, h3, p, figure, dl, dd { margin: 0; }
 .manifest-card h3 { font-family: var(--display); font-size: 1.04rem; font-weight: 600; color: var(--text); line-height: 1.2; }
 .manifest-card p { color: var(--dim); font-size: 0.85rem; font-weight: 300; line-height: 1.5; margin: 0; }
 
+/* ── The operations: four inspection-type cards ── */
+.ops-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.op-card {
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--hair); border-radius: 12px; background: var(--surface);
+  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.op-card:hover {
+  transform: translateY(-3px); border-color: color-mix(in srgb, var(--teal) 45%, var(--hair));
+  box-shadow: 0 22px 50px -34px rgba(0, 0, 0, 0.85);
+}
+.op-art {
+  position: relative; aspect-ratio: 16 / 9; border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(80% 80% at 50% 42%, color-mix(in srgb, var(--teal) 14%, var(--bg-bottom)), var(--bg-bottom) 74%);
+}
+.op-art img { width: 100%; height: 100%; object-fit: contain; padding: 0.4rem 0.6rem; }
+.op-badge {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+  color: #1a1205; background: var(--amber); padding: 0.18rem 0.5rem; border-radius: 5px;
+}
+.op-body { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.2rem 1.3rem; flex: 1; }
+.op-eyebrow { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); }
+.op-card h3 { font-family: var(--display); font-size: 1.1rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+.op-desc { color: var(--dim); font-size: 0.85rem; font-weight: 300; line-height: 1.5; margin: 0; }
+.op-foot {
+  margin: 0.3rem 0 0; padding-top: 0.7rem; margin-top: auto;
+  border-top: 1px solid var(--line); font-size: 0.66rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--dim);
+}
+.op-foot b { font-size: 1.15rem; font-weight: 700; color: var(--teal); letter-spacing: 0; margin-right: 0.25rem; }
+
 /* ── Feature spotlight: annotated live HUD ── */
 .spotlight { margin-bottom: 1.5rem; }
 .pin {
@@ -598,6 +631,7 @@ html.js .reveal.is-in {
   .vehicle-stage { order: -1; min-height: 320px; }
   .vehicle-readout { max-width: none; }
   .feature-grid { grid-template-columns: 1fr 1fr; }
+  .ops-grid { grid-template-columns: repeat(2, 1fr); }
   .vessel-manifest { grid-template-columns: repeat(2, 1fr); }
   .spotlight-legend { grid-template-columns: 1fr; }
   .follow { grid-template-columns: 1fr; gap: 1.8rem; padding: 2.2rem; }
@@ -630,6 +664,7 @@ html.js .reveal.is-in {
   /* features: one column; spotlight HUD is too small to annotate — drop the
      pins and let the numbered legend carry the explanation */
   .feature-grid { grid-template-columns: 1fr; }
+  .ops-grid { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
   .vessel-manifest { grid-template-columns: 1fr; }
   .harbour-pair { grid-template-columns: 1fr; }
   .feature, .feature-grid .feature:not(:nth-child(3n+1)) { padding-left: 0; border-left: none; }

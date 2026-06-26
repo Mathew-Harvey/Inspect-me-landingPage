@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ROView — Inspection Class SIM. A light inspection-class ROV pilot training simulator. Deploy, survey, surface: photo-survey ship hulls and submerged structures with realistic hydrodynamics, FPV control, and a live video stream. In active development." />
+  <meta name="description" content="ROView — Inspection Class SIM. A light inspection-class ROV pilot training simulator. Deploy, survey, surface: photo-survey ship hulls, deep-water moorings, live subsea pipe-lay and jetty pylons with realistic hydrodynamics, FPV control, and a live video stream. In active development." />
   <meta name="theme-color" content="#05121B" />
   <meta name="color-scheme" content="light dark" />
 
@@ -11,7 +11,7 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="ROView — Inspection Class SIM" />
-  <meta property="og:description" content="The training simulator for light inspection-class ROV pilots. Photo-survey ship hulls and submerged structures. In active development." />
+  <meta property="og:description" content="The training simulator for light inspection-class ROV pilots. Photo-survey ship hulls, deep-water moorings, live subsea pipe-lay and jetty pylons. In active development." />
   <meta property="og:image" content="assets/images/og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -76,6 +76,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="#vehicle">The ROV</a></li>
+        <li><a href="#operations">Operations</a></li>
         <li><a href="#survey">The survey</a></li>
         <li><a href="#vessels">Vessels</a></li>
         <li><a href="#features">Features</a></li>
@@ -99,6 +100,7 @@
 
   <div class="mobile-menu" id="mobile-menu" hidden>
     <a href="#vehicle">The ROV</a>
+    <a href="#operations">Operations</a>
     <a href="#survey">The survey</a>
     <a href="#vessels">Vessels</a>
     <a href="#features">Features</a>
@@ -206,6 +208,70 @@
             <figcaption>The surface tether reel and umbilical — finite-reel management the sim makes you practise.</figcaption>
           </figure>
         </div>
+      </div>
+    </section>
+
+    <!-- ───────────── THE OPERATIONS: four inspection types ───────────── -->
+    <section class="section" id="operations">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Mission select · four jobs</p>
+          <h2>The hull is only the first job.</h2>
+          <p class="section-sub">One ROV, one set of sticks — four very different operations. Each is its own
+            structure, depth and survey discipline, picked from the mission-select screen before you splash.</p>
+        </header>
+
+        <ol class="ops-grid" aria-label="The four inspection operations">
+          <li class="op-card">
+            <div class="op-art">
+              <img src="assets/images/job-vessel.png" alt="3D illustration of a ship on the waterline with its underwater hull fittings picked out" width="1040" height="496" loading="lazy" decoding="async" />
+            </div>
+            <div class="op-body">
+              <p class="op-eyebrow mono">Hull inspection</p>
+              <h3>Vessel hull survey</h3>
+              <p class="op-desc">Photo-survey a moored ship's underwater General-Arrangement — propellers, rudders, sea chests, anodes and sensors.</p>
+              <p class="op-foot mono"><b>8</b> hulls in port</p>
+            </div>
+          </li>
+
+          <li class="op-card">
+            <div class="op-art">
+              <img src="assets/images/job-mooring.png" alt="3D illustration of a surface mooring buoy with its riser chain, ground tackle and seabed anchor" width="1040" height="496" loading="lazy" decoding="async" />
+            </div>
+            <div class="op-body">
+              <p class="op-eyebrow mono">60 m descent</p>
+              <h3>Deep-water mooring</h3>
+              <p class="op-desc">Descend 60 m to inspect a vessel mooring end to end — bull ring, swivel, riser chain, ground tackle and the anchors on the seabed.</p>
+              <p class="op-foot mono"><b>16</b> components · 60 m</p>
+            </div>
+          </li>
+
+          <li class="op-card">
+            <span class="op-badge mono">New</span>
+            <div class="op-art">
+              <img src="assets/images/job-pipelay.png" alt="3D illustration of an S-lay barge paying pipe over its stinger down to the seabed" width="1040" height="496" loading="lazy" decoding="async" />
+            </div>
+            <div class="op-body">
+              <p class="op-eyebrow mono">Live lay · fly the line</p>
+              <h3>Subsea pipe-lay</h3>
+              <p class="op-desc">Fly the moving touchdown of an S-lay operation — stinger, catenary, sagbend, field joints, anodes and free spans as the pipe goes down.</p>
+              <p class="op-foot mono"><b>14</b> features · live op</p>
+            </div>
+          </li>
+
+          <li class="op-card">
+            <span class="op-badge mono">Final</span>
+            <div class="op-art">
+              <img src="assets/images/job-jetty.png" alt="3D illustration of a piled berthing jetty with its pylons, cross-bracing and fenders" width="1040" height="496" loading="lazy" decoding="async" />
+            </div>
+            <div class="op-body">
+              <p class="op-eyebrow mono">Piled jetty · final survey</p>
+              <h3>Jetty pylons</h3>
+              <p class="op-desc">Fly a berthing jetty's piles top to bottom — marine growth, splash-zone corrosion, concrete spalling, scour, bracing and fender damage.</p>
+              <p class="op-foot mono"><b>14</b> components · 14 m</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </section>
 
